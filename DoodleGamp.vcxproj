@@ -24,6 +24,7 @@
     <ProjectGuid>{0c084ec4-006c-4b3c-9cde-b10bb0d1ad20}</ProjectGuid>
     <RootNamespace>DoodleGamp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>DoodelGump</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

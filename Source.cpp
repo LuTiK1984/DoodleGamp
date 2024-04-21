@@ -5,7 +5,7 @@
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
 
-int win_width = 800, win_height = 600;
+int win_width = 600, win_height = 800;
 double sx;
 double sy;
 
@@ -80,13 +80,14 @@ void Init()
 }
 
 void WorkWithKeys()
-{
+{ 
 	//Действия с зажатыми клавишами
-	if (isUpPressed && !isDownPressed) y += 5;
-	if (!isUpPressed && isDownPressed) y -= 5;
+	if (isUpPressed && !isDownPressed) y -= 5;
+	if (!isUpPressed && isDownPressed) y += 5;
 	if (isRightPressed && !isLeftPressed) x += 5;
 	if (!isRightPressed && isLeftPressed) x -= 5;
 }
+
 
 
 int main(int arcg, char* argv[])
@@ -95,6 +96,7 @@ int main(int arcg, char* argv[])
 	Init();
 
 	SDL_Surface* surface = IMG_Load("jaba.jpg");
+	
 	if (surface == NULL)
 	{
 		printf("Couldn`t load Jaba! Error: %s", SDL_GetError());
@@ -143,24 +145,26 @@ int main(int arcg, char* argv[])
 			case SDL_KEYDOWN: //Обработка зажатия клавиш клавиатуры
 				switch (ev.key.keysym.scancode)
 				{
+				
 				case SDL_SCANCODE_ESCAPE: //Клавиша ESC
 					isRunning = false;
 					break;
+				
 				case SDL_SCANCODE_RIGHT: //Клавиша стрелка вправо
-					x += 10;
-					//isRightPressed = true;
+					
+					isRightPressed = true;
 					break;
 				case SDL_SCANCODE_LEFT: //Клавиша стрелка влево
-					x -= 10;
-					//isLeftPressed = true;
+					
+					isLeftPressed = true;
 					break;
 				case SDL_SCANCODE_UP: //Клавиша стрелка вверх
-					y -= 10;
-					//isUpPressed = true;
+					
+					isUpPressed = true;
 					break;
 				case SDL_SCANCODE_DOWN: //Клавиша стрелка вниз
-					y += 10;
-					//isDownPressed = true;
+					
+					isDownPressed = true;
 					break;
 				case SDL_SCANCODE_PAGEUP:
 					angle += 15;
@@ -192,6 +196,9 @@ int main(int arcg, char* argv[])
 		}
 
 		dst_rect = { x, y, img_rect.w, img_rect.h };
+
+		WorkWithKeys();
+
 
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);

@@ -54,12 +54,12 @@ void Init()
 	if (res & IMG_INIT_JPG) printf("Inintialized JPG library.\n"); else printf("Inintialize failed JPG library.\n");
 
 	win = SDL_CreateWindow(
-		"KVAJABLYABUSHKA",
+		"dOODELgUMP",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		win_width,
 		win_height,
-		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
+		SDL_WINDOW_SHOWN 
 	);
 
 	if (win == NULL)
@@ -95,7 +95,7 @@ int main(int arcg, char* argv[])
 	system("chcp 1251");
 	Init();
 
-	SDL_Surface* surface = IMG_Load("jaba.jpg");
+	SDL_Surface* surface = IMG_Load("menu.png");
 	
 	if (surface == NULL)
 	{
@@ -107,14 +107,13 @@ int main(int arcg, char* argv[])
 	SDL_Surface* win_surf = SDL_GetWindowSurface(win);
 
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(render, surface);
+	
 	SDL_Rect img_rect = { 0, 0, surface->w, surface->h };
+	
 	SDL_FreeSurface(surface);
 
 	SDL_Event ev;
 	bool isRunning = true;
-
-
-	SDL_Rect dst_rect = { 0, 0, 0, 0 };
 
 	while (isRunning)
 	{
@@ -124,14 +123,6 @@ int main(int arcg, char* argv[])
 			{
 			case SDL_QUIT: //Выход из приложения (закрытие окна)
 				isRunning = false;
-				break;
-
-			case SDL_WINDOWEVENT:
-				if (ev.window.event == SDL_WINDOWEVENT_RESIZED) //Изменения размеров окна
-				{
-					win_width = ev.window.data1;
-					win_height = ev.window.data2;
-				}
 				break;
 
 			case SDL_MOUSEBUTTONDOWN: //Обработка зажатия ЛКМ
@@ -166,12 +157,6 @@ int main(int arcg, char* argv[])
 					
 					isDownPressed = true;
 					break;
-				case SDL_SCANCODE_PAGEUP:
-					angle += 15;
-					break;
-				case SDL_SCANCODE_PAGEDOWN:
-					angle -= 15;
-					break;
 				}
 				break;
 
@@ -195,16 +180,14 @@ int main(int arcg, char* argv[])
 			}
 		}
 
-		dst_rect = { x, y, img_rect.w, img_rect.h };
+		SDL_Rect dst_rect = { x, y, img_rect.w, img_rect.h };
 
-		WorkWithKeys();
 
 
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);
 
-		//SDL_RenderCopy(render, texture, NULL, &dst_rect);
-		SDL_RenderCopyEx(render, texture, NULL, &dst_rect, angle, NULL, SDL_FLIP_NONE);
+		SDL_RenderCopy(render, texture, NULL, &dst_rect);
 		SDL_RenderPresent(render);
 
 

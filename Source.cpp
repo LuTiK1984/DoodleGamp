@@ -6,22 +6,14 @@ SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
 
 int win_width = 600, win_height = 800;
-double sx;
-double sy;
-
-int sixSize = 100;
-int radius[1000] = { 0 };
 
 int x = 0;
 int y = 0;
-
 
 bool isRightPressed = false;
 bool isLeftPressed = false;
 bool isUpPressed = false;
 bool isDownPressed = false;
-
-double angle = 0;
 
 void DeInit(int error)
 {
@@ -99,7 +91,7 @@ int main(int arcg, char* argv[])
 	
 	if (surface == NULL)
 	{
-		printf("Couldn`t load Jaba! Error: %s", SDL_GetError());
+		printf("Couldn`t load menu! Error: %s", SDL_GetError());
 		system("pause");
 		DeInit(1);
 	}

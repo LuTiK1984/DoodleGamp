@@ -81,13 +81,14 @@ void WorkWithKeys()
 }
 
 
-
 int main(int arcg, char* argv[])
 {
 	system("chcp 1251");
 	Init();
 
-	SDL_Surface* surface = IMG_Load("menu.png");
+#pragma region MENU
+
+	SDL_Surface* surface = IMG_Load("sprites/menu.png");
 	
 	if (surface == NULL)
 	{
@@ -103,6 +104,8 @@ int main(int arcg, char* argv[])
 	SDL_Rect img_rect = { 0, 0, surface->w, surface->h };
 	
 	SDL_FreeSurface(surface);
+
+#pragma endregion
 
 	SDL_Event ev;
 	bool isRunning = true;

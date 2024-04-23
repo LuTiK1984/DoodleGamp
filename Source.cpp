@@ -149,7 +149,7 @@ int main(int arcg, char* argv[])
 					if ((x >= 120 && x <= 343) && (y >= 380 && y <= 462))
 					{
 						if (rectplbuttoncondition.y == 81) rectplbuttoncondition.y = 0;
-						else rectplbuttoncondition.y += 81;
+						else rectplbuttoncondition.y = 81;
 					}
 				}
 				break;

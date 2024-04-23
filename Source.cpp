@@ -107,11 +107,16 @@ int main(int arcg, char* argv[])
 
 #pragma endregion
 
+
+#pragma region MAINCYCLE
+
 	SDL_Event ev;
 	bool isRunning = true;
-
+	
 	while (isRunning)
 	{
+
+	#pragma region EVENT
 		while (SDL_PollEvent(&ev))
 		{
 			switch (ev.type)
@@ -175,10 +180,17 @@ int main(int arcg, char* argv[])
 			}
 		}
 
+	#pragma endregion
+
+
+	#pragma region LOGIC
 		SDL_Rect dst_rect = { x, y, img_rect.w, img_rect.h };
 
 
+	#pragma endregion
 
+
+	#pragma region DRAWING
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);
 
@@ -186,11 +198,12 @@ int main(int arcg, char* argv[])
 		SDL_RenderPresent(render);
 
 
-
 		SDL_Delay(10);
+	#pragma endregion 
+	
 	}
 
-
+#pragma endregion
 
 	SDL_DestroyTexture(texture);
 	DeInit(0);

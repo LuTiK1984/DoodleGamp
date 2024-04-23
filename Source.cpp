@@ -5,7 +5,7 @@
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
 
-int win_width = 634, win_height = 955;
+int win_width = 630, win_height = 950;
 
 int x = 0;
 int y = 0;
@@ -81,6 +81,7 @@ void WorkWithKeys()
 }
 
 
+
 int main(int arcg, char* argv[])
 {
 	system("chcp 1251");
@@ -88,22 +89,36 @@ int main(int arcg, char* argv[])
 
 #pragma region MENU
 
-	SDL_Surface* surface = IMG_Load("sprites/menu.png");
+	SDL_Surface* mainmenu = IMG_Load("sprites/menu.png");
 	
-	if (surface == NULL)
+	if (mainmenu == NULL)
 	{
 		printf("Couldn`t load menu! Error: %s", SDL_GetError());
 		system("pause");
 		DeInit(1);
 	}
 
-	SDL_Surface* win_surf = SDL_GetWindowSurface(win);
+	SDL_Texture* menu = SDL_CreateTextureFromSurface(render, mainmenu);
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(render, surface);
 	
-	SDL_Rect img_rect = { 0, 0, surface->w, surface->h };
+	SDL_FreeSurface(mainmenu);
+
+
+	SDL_Surface* playbutton = IMG_Load("sprites/playbutton.png");
+
+	if (playbutton == NULL)
+	{
+		printf("Couldn`t load play button! Error: %s", SDL_GetError());
+		system("pause");
+		DeInit(1);
+	}
+
+	SDL_Texture* plbutton = SDL_CreateTextureFromSurface(render, playbutton);
 	
-	SDL_FreeSurface(surface);
+	SDL_Rect srsrectplbutton = {120, 380, 223, 82 };
+	SDL_Rect rectplbuttoncondition = {0,0,223,82};
+	SDL_FreeSurface(playbutton);
+
 
 #pragma endregion
 
@@ -130,6 +145,12 @@ int main(int arcg, char* argv[])
 				{
 					x = ev.button.x;
 					y = ev.button.y;
+
+					if ((x >= 120 && x <= 343) && (y >= 380 && y <= 462))
+					{
+						if (rectplbuttoncondition.y == 81) rectplbuttoncondition.y = 0;
+						else rectplbuttoncondition.y += 81;
+					}
 				}
 				break;
 
@@ -184,7 +205,7 @@ int main(int arcg, char* argv[])
 
 
 	#pragma region LOGIC
-		SDL_Rect dst_rect = { x, y, img_rect.w, img_rect.h };
+		
 
 
 	#pragma endregion
@@ -194,7 +215,9 @@ int main(int arcg, char* argv[])
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);
 
-		SDL_RenderCopy(render, texture, NULL, &dst_rect);
+
+		SDL_RenderCopy(render, menu, NULL, NULL);
+		SDL_RenderCopy(render, plbutton, &rectplbuttoncondition, &srsrectplbutton);
 		SDL_RenderPresent(render);
 
 
@@ -205,7 +228,8 @@ int main(int arcg, char* argv[])
 
 #pragma endregion
 
-	SDL_DestroyTexture(texture);
+	SDL_DestroyTexture(plbutton);
+	SDL_DestroyTexture(menu);
 	DeInit(0);
 	return 0;
 }

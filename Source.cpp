@@ -5,7 +5,7 @@
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
 
-int win_width = 600, win_height = 800;
+int win_width = 634, win_height = 955;
 
 int x = 0;
 int y = 0;

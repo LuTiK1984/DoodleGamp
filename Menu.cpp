@@ -6,7 +6,7 @@
 void CreateMenu(SDL_Renderer* render, SDL_Surface* &mainmenu, SDL_Texture* &menu, SDL_Surface* &playbutton, SDL_Texture* &plbutton, SDL_Surface* &settingsbutton, SDL_Texture* &sttngsbutton)
 {
 
-	mainmenu = IMG_Load("sprites/menu.png");
+	mainmenu = IMG_Load("sprites/atlas3.png");
 	menu = SDL_CreateTextureFromSurface(render, mainmenu);
 
 	playbutton = IMG_Load("sprites/playbutton.png");
@@ -43,9 +43,9 @@ void CreateMenu(SDL_Renderer* render, SDL_Surface* &mainmenu, SDL_Texture* &menu
 	SDL_FreeSurface(settingsbutton);
 }	
 
-void MainMenuDraw(SDL_Renderer* render, SDL_Texture* menu, SDL_Texture* plbutton, SDL_Texture* sttngsbutton, SDL_Rect &rectplbuttoncondition, SDL_Rect &srsrectplbutton, SDL_Rect& rectsttngsbuttoncondition, SDL_Rect& srsrectsttngsbutton, SDL_Rect& rectbckcondition)
+void MainMenuDraw(SDL_Renderer* render, SDL_Texture* menu, SDL_Texture* plbutton, SDL_Texture* sttngsbutton, SDL_Rect &rectplbuttoncondition, SDL_Rect &srsrectplbutton, SDL_Rect& rectsttngsbuttoncondition, SDL_Rect& srsrectsttngsbutton, SDL_Rect& rectmenucondition, SDL_Rect &srsrectmenu)
 {
-	SDL_RenderCopy(render, menu, &rectbckcondition, NULL);
+	SDL_RenderCopy(render, menu, &rectmenucondition, &srsrectmenu);
 	SDL_RenderCopy(render, plbutton, &rectplbuttoncondition, &srsrectplbutton);
 	SDL_RenderCopy(render, sttngsbutton, &rectsttngsbuttoncondition, &srsrectsttngsbutton);
 }

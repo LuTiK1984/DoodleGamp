@@ -111,6 +111,9 @@ int main(int arcg, char* argv[])
 
 	CreateMenu(render, mainmenu, menu, playbutton, plbutton, settingsbutton, sttngsbutton);
 
+	SDL_Rect srsrectmenu = { 0, 0, 630, 950 };
+	SDL_Rect rectmenucondition = { 641,0,630,950 };
+
 	SDL_Rect srsrectplbutton = { 120, 380, 223, 82 };
 	SDL_Rect rectplbuttoncondition = { 0,0,223,82 };
 
@@ -268,7 +271,7 @@ int main(int arcg, char* argv[])
 		}
 		else
 		{
-			MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton, rectbckcondition);
+			MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton, rectmenucondition, srsrectmenu);
 		}
 
 		SDL_RenderPresent(render);

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <Menu.h>
 #include <Game.h>
 
@@ -61,6 +62,8 @@ void Init()
 		SDL_WINDOW_SHOWN 
 	);
 
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
 	if (win == NULL)
 	{
 		printf("Window Error! - %s", SDL_GetError());
@@ -76,6 +79,8 @@ void Init()
 		system("pause");
 		DeInit(1);
 	}
+
+
 }
 
 void WorkWithKeys()
@@ -112,6 +117,7 @@ int main(int arcg, char* argv[])
 	SDL_Rect srsrectsttngsbutton = {500, 750, 115, 95 };
 	SDL_Rect rectsttngsbuttoncondition = {790, 850, 115, 95};
 
+	Mix_Music* menumusic = Mix_LoadMUS("sound/nonamemusic1.mp3");
 #pragma endregion
 
 
@@ -134,6 +140,7 @@ int main(int arcg, char* argv[])
 	bool isRunning = true;
 	bool isGame = false;
 
+	Mix_PlayMusic(menumusic, -1);
 
 	while (isRunning)
 	{
@@ -144,7 +151,8 @@ int main(int arcg, char* argv[])
 			switch (ev.type)
 			{
 			case SDL_QUIT: //Выход из приложения (закрытие окна)
-				isRunning = false;
+				if (!isGame) isRunning = false;
+				isGame = false;
 				break;
 
 
@@ -240,9 +248,13 @@ int main(int arcg, char* argv[])
 		
 		if (isGame)
 		{
-
+			Mix_PauseMusic();
 		}
 
+		else
+		{
+			Mix_ResumeMusic();
+		}
 	#pragma endregion
 
 
@@ -270,6 +282,7 @@ int main(int arcg, char* argv[])
 
 	MainMenuDestroy(menu, plbutton, sttngsbutton);
 	DestroyGame(bck);
+	Mix_CloseAudio();
 	DeInit(0);
 	return 0;
 }

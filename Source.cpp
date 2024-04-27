@@ -9,8 +9,8 @@ SDL_Renderer* render = NULL;
 
 int win_width = 630, win_height = 950;
 
-int mouseclick_x = 0;
-int mouseclick_y = 0;
+int mouse_x = 0;
+int mouse_y = 0;
 
 int x, y;
 
@@ -129,31 +129,28 @@ int main(int arcg, char* argv[])
 				isRunning = false;
 				break;
 
-			case SDL_MOUSEBUTTONDOWN: //Обработка зажатия ЛКМ
-				if (ev.button.button == SDL_BUTTON_LEFT)
+			case SDL_MOUSEMOTION: //Обработка зажатия ЛКМ
+					
+				SDL_GetMouseState(&mouse_x, &mouse_y);
+
+				if ((mouse_x >= 120 && mouse_x <= 343) && (mouse_y >= 380 && mouse_y <= 462))
 				{
-					mouseclick_x = ev.button.x;
-					mouseclick_y = ev.button.y;
-
-					if ((mouseclick_x >= 120 && mouseclick_x <= 343) && (mouseclick_y >= 380 && mouseclick_y <= 462))
-					{
-						if (rectplbuttoncondition.y == 81) rectplbuttoncondition.y = 0;
-						else rectplbuttoncondition.y = 81;
-					}
-
-					if ((mouseclick_x >= 500 && mouseclick_x <= 615) && (mouseclick_y >= 750 && mouseclick_y <= 845))
-					{
-						if ((rectsttngsbuttoncondition.x == 641) && (rectsttngsbuttoncondition.y == 1028))
-						{
-							rectsttngsbuttoncondition.x = 790;
-							rectsttngsbuttoncondition.y = 850;
-						}
-						else
-						{
-							rectsttngsbuttoncondition.x = 641;
-							rectsttngsbuttoncondition.y = 1028;
-						}
-					}
+					rectplbuttoncondition.y = 81;
+				}
+				else
+				{
+					rectplbuttoncondition.y = 0;
+				}
+				
+				if ((mouse_x >= 500 && mouse_x <= 615) && (mouse_y >= 750 && mouse_y <= 845))
+				{
+					rectsttngsbuttoncondition.x = 641;
+					rectsttngsbuttoncondition.y = 1028;
+				}
+				else
+				{
+					rectsttngsbuttoncondition.x = 790;
+					rectsttngsbuttoncondition.y = 850;
 				}
 				break;
 

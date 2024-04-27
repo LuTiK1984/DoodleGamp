@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 void CreateMenu(SDL_Renderer* render, SDL_Surface* &mainmenu, SDL_Texture* &menu, SDL_Surface* &playbutton, SDL_Texture* &plbutton, SDL_Surface* &settingsbutton, SDL_Texture* &sttngsbutton)
 {

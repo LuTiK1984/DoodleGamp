@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-
+#include <SDL_mixer.h>
 
 void CreateBackground(SDL_Renderer* render, SDL_Surface* &background, SDL_Texture* &bck)
 {

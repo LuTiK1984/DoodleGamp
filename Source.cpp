@@ -12,6 +12,8 @@ int win_width = 630, win_height = 950;
 int mouseclick_x = 0;
 int mouseclick_y = 0;
 
+int x, y;
+
 bool isRightPressed = false;
 bool isLeftPressed = false;
 bool isUpPressed = false;

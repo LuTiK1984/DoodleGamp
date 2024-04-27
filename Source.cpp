@@ -120,7 +120,7 @@ int main(int arcg, char* argv[])
 	SDL_Rect srsrectsttngsbutton = {500, 750, 115, 95 };
 	SDL_Rect rectsttngsbuttoncondition = {790, 850, 115, 95};
 
-	Mix_Music* menumusic = Mix_LoadMUS("sound/nonamemusic1.mp3");
+	Mix_Music* menumusic = Mix_LoadMUS("music/nonamemusic1.mp3");
 #pragma endregion
 
 
@@ -286,6 +286,7 @@ int main(int arcg, char* argv[])
 	MainMenuDestroy(menu, plbutton, sttngsbutton);
 	DestroyGame(bck);
 	Mix_CloseAudio();
+	
 	DeInit(0);
 	return 0;
 }

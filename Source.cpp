@@ -98,10 +98,16 @@ int main(int arcg, char* argv[])
 	SDL_Surface* playbutton;
 	SDL_Texture* plbutton;
 
-	CreateMenu(render, mainmenu, menu, playbutton, plbutton);
+	SDL_Surface* settingsbutton;
+	SDL_Texture* sttngsbutton;
+
+	CreateMenu(render, mainmenu, menu, playbutton, plbutton, settingsbutton, sttngsbutton);
 
 	SDL_Rect srsrectplbutton = { 120, 380, 223, 82 };
 	SDL_Rect rectplbuttoncondition = { 0,0,223,82 };
+
+	SDL_Rect srsrectsttngsbutton = {500, 750, 115, 95 };
+	SDL_Rect rectsttngsbuttoncondition = {790, 850, 115, 95};
 
 #pragma endregion
 
@@ -133,6 +139,20 @@ int main(int arcg, char* argv[])
 					{
 						if (rectplbuttoncondition.y == 81) rectplbuttoncondition.y = 0;
 						else rectplbuttoncondition.y = 81;
+					}
+
+					if ((mouseclick_x >= 500 && mouseclick_x <= 615) && (mouseclick_y >= 750 && mouseclick_y <= 845))
+					{
+						if ((rectsttngsbuttoncondition.x == 641) && (rectsttngsbuttoncondition.y == 1028))
+						{
+							rectsttngsbuttoncondition.x = 790;
+							rectsttngsbuttoncondition.y = 850;
+						}
+						else
+						{
+							rectsttngsbuttoncondition.x = 641;
+							rectsttngsbuttoncondition.y = 1028;
+						}
 					}
 				}
 				break;
@@ -198,7 +218,7 @@ int main(int arcg, char* argv[])
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);
 
-		MainMenuDraw(render, menu,plbutton,rectplbuttoncondition,srsrectplbutton);
+		MainMenuDraw(render, menu,plbutton,sttngsbutton,rectplbuttoncondition,srsrectplbutton,rectsttngsbuttoncondition,srsrectsttngsbutton);
 
 		SDL_RenderPresent(render);
 
@@ -209,7 +229,7 @@ int main(int arcg, char* argv[])
 
 #pragma endregion
 
-	MainMenuDestroy(menu,plbutton);
+	MainMenuDestroy(menu,plbutton,sttngsbutton);
 	DeInit(0);
 	return 0;
 }

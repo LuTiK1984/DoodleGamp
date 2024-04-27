@@ -12,6 +12,9 @@ int win_width = 630, win_height = 950;
 int mouse_x = 0;
 int mouse_y = 0;
 
+int mouseclick_x = 0;
+int mouseclick_y = 0;
+
 int x, y;
 
 bool isRightPressed = false;
@@ -129,7 +132,16 @@ int main(int arcg, char* argv[])
 				isRunning = false;
 				break;
 
-			case SDL_MOUSEMOTION: //Обработка зажатия ЛКМ
+
+			case SDL_MOUSEBUTTONDOWN: //Обработка зажатия ЛКМ
+				if (ev.button.button == SDL_BUTTON_LEFT)
+				{
+					mouseclick_x = ev.button.x;
+					mouseclick_y = ev.button.y;
+				}
+				break;
+
+			case SDL_MOUSEMOTION: //Обработка позиции курсора
 					
 				SDL_GetMouseState(&mouse_x, &mouse_y);
 
@@ -215,7 +227,7 @@ int main(int arcg, char* argv[])
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);
 
-		MainMenuDraw(render, menu,plbutton,sttngsbutton,rectplbuttoncondition,srsrectplbutton,rectsttngsbuttoncondition,srsrectsttngsbutton);
+		MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton);
 
 		SDL_RenderPresent(render);
 
@@ -226,7 +238,7 @@ int main(int arcg, char* argv[])
 
 #pragma endregion
 
-	MainMenuDestroy(menu,plbutton,sttngsbutton);
+	MainMenuDestroy(menu, plbutton, sttngsbutton);
 	DeInit(0);
 	return 0;
 }

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <Menu.h>
+
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -88,37 +90,16 @@ int main(int arcg, char* argv[])
 	Init();
 
 #pragma region MENU
+	SDL_Surface* mainmenu;
+	SDL_Texture* menu;
 
-	SDL_Surface* mainmenu = IMG_Load("sprites/menu.png");
-	
-	if (mainmenu == NULL)
-	{
-		printf("Couldn`t load menu! Error: %s", SDL_GetError());
-		system("pause");
-		DeInit(1);
-	}
+	SDL_Surface* playbutton;
+	SDL_Texture* plbutton;
 
-	SDL_Texture* menu = SDL_CreateTextureFromSurface(render, mainmenu);
+	CreateMenu(render, mainmenu, menu, playbutton, plbutton);
 
-	
-	SDL_FreeSurface(mainmenu);
-
-
-	SDL_Surface* playbutton = IMG_Load("sprites/playbutton.png");
-
-	if (playbutton == NULL)
-	{
-		printf("Couldn`t load play button! Error: %s", SDL_GetError());
-		system("pause");
-		DeInit(1);
-	}
-
-	SDL_Texture* plbutton = SDL_CreateTextureFromSurface(render, playbutton);
-	
-	SDL_Rect srsrectplbutton = {120, 380, 223, 82 };
-	SDL_Rect rectplbuttoncondition = {0,0,223,82};
-	SDL_FreeSurface(playbutton);
-
+	SDL_Rect srsrectplbutton = { 120, 380, 223, 82 };
+	SDL_Rect rectplbuttoncondition = { 0,0,223,82 };
 
 #pragma endregion
 
@@ -215,11 +196,9 @@ int main(int arcg, char* argv[])
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);
 
+		MainMenuDraw(render, menu,plbutton,rectplbuttoncondition,srsrectplbutton);
 
-		SDL_RenderCopy(render, menu, NULL, NULL);
-		SDL_RenderCopy(render, plbutton, &rectplbuttoncondition, &srsrectplbutton);
 		SDL_RenderPresent(render);
-
 
 		SDL_Delay(10);
 	#pragma endregion 
@@ -228,8 +207,7 @@ int main(int arcg, char* argv[])
 
 #pragma endregion
 
-	SDL_DestroyTexture(plbutton);
-	SDL_DestroyTexture(menu);
+	MainMenuDestroy(menu,plbutton);
 	DeInit(0);
 	return 0;
 }

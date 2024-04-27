@@ -42,9 +42,9 @@ void CreateMenu(SDL_Renderer* render, SDL_Surface* &mainmenu, SDL_Texture* &menu
 	SDL_FreeSurface(settingsbutton);
 }	
 
-void MainMenuDraw(SDL_Renderer* render, SDL_Texture* menu, SDL_Texture* plbutton, SDL_Texture* sttngsbutton, SDL_Rect &rectplbuttoncondition, SDL_Rect &srsrectplbutton, SDL_Rect& rectsttngsbuttoncondition, SDL_Rect& srsrectsttngsbutton)
+void MainMenuDraw(SDL_Renderer* render, SDL_Texture* menu, SDL_Texture* plbutton, SDL_Texture* sttngsbutton, SDL_Rect &rectplbuttoncondition, SDL_Rect &srsrectplbutton, SDL_Rect& rectsttngsbuttoncondition, SDL_Rect& srsrectsttngsbutton, SDL_Rect& rectbckcondition)
 {
-	SDL_RenderCopy(render, menu, NULL, NULL);
+	SDL_RenderCopy(render, menu, &rectbckcondition, NULL);
 	SDL_RenderCopy(render, plbutton, &rectplbuttoncondition, &srsrectplbutton);
 	SDL_RenderCopy(render, sttngsbutton, &rectsttngsbuttoncondition, &srsrectsttngsbutton);
 }

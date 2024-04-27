@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <Menu.h>
-
+#include <Game.h>
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -115,11 +115,26 @@ int main(int arcg, char* argv[])
 #pragma endregion
 
 
+
+#pragma region GAME
+
+	SDL_Surface* background;
+	SDL_Texture* bck;
+
+	CreateBackground(render, background, bck);
+
+	SDL_Rect rectbckcondition = { 0,0,630,950 };
+#pragma endregion
+
+
+
 #pragma region MAINCYCLE
 
 	SDL_Event ev;
 	bool isRunning = true;
-	
+	bool isGame = false;
+
+
 	while (isRunning)
 	{
 
@@ -138,6 +153,11 @@ int main(int arcg, char* argv[])
 				{
 					mouseclick_x = ev.button.x;
 					mouseclick_y = ev.button.y;
+
+					if ((mouseclick_x >= 120 && mouseclick_x <= 343) && (mouseclick_y >= 380 && mouseclick_y <= 462))
+					{
+						isGame = true;
+					}
 				}
 				break;
 
@@ -218,7 +238,10 @@ int main(int arcg, char* argv[])
 
 	#pragma region LOGIC
 		
+		if (isGame)
+		{
 
+		}
 
 	#pragma endregion
 
@@ -226,12 +249,19 @@ int main(int arcg, char* argv[])
 	#pragma region DRAWING
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 		SDL_RenderClear(render);
-
-		MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton);
+		
+		if(isGame)
+		{
+			DrawBackground(render, bck, rectbckcondition);
+		}
+		else
+		{
+			MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton, rectbckcondition);
+		}
 
 		SDL_RenderPresent(render);
 
-		SDL_Delay(10);
+		SDL_Delay(100);
 	#pragma endregion 
 	
 	}
@@ -239,6 +269,7 @@ int main(int arcg, char* argv[])
 #pragma endregion
 
 	MainMenuDestroy(menu, plbutton, sttngsbutton);
+	DestroyGame(bck);
 	DeInit(0);
 	return 0;
 }

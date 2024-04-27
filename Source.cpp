@@ -9,8 +9,8 @@ SDL_Renderer* render = NULL;
 
 int win_width = 630, win_height = 950;
 
-int x = 0;
-int y = 0;
+int mouseclick_x = 0;
+int mouseclick_y = 0;
 
 bool isRightPressed = false;
 bool isLeftPressed = false;
@@ -124,10 +124,10 @@ int main(int arcg, char* argv[])
 			case SDL_MOUSEBUTTONDOWN: //Обработка зажатия ЛКМ
 				if (ev.button.button == SDL_BUTTON_LEFT)
 				{
-					x = ev.button.x;
-					y = ev.button.y;
+					mouseclick_x = ev.button.x;
+					mouseclick_y = ev.button.y;
 
-					if ((x >= 120 && x <= 343) && (y >= 380 && y <= 462))
+					if ((mouseclick_x >= 120 && mouseclick_x <= 343) && (mouseclick_y >= 380 && mouseclick_y <= 462))
 					{
 						if (rectplbuttoncondition.y == 81) rectplbuttoncondition.y = 0;
 						else rectplbuttoncondition.y = 81;

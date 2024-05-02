@@ -6,6 +6,7 @@
 #include <Game.h>
 
 #pragma region GLOBALINIT
+#define PLAYER_JUMP_SPEED 32
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -92,6 +93,10 @@ void Init()
 
 void PlayerMovement()
 { 
+	if (player.a == (PLAYER_JUMP_SPEED + 2)*-1) player.a = PLAYER_JUMP_SPEED;
+	player.y -= player.a;
+	player.a -= 2;
+	
 	
 
 
@@ -100,12 +105,12 @@ void PlayerMovement()
 
 	if (isRightPressed && !isLeftPressed)
 	{
-		player.x += 5;
+		player.x += 10;
 		player.isFlip = true;
 	}
 	if (!isRightPressed && isLeftPressed)
 	{
-		player.x -= 5;
+		player.x -= 10;
 		player.isFlip = false;
 	}
 }
@@ -156,6 +161,7 @@ int main(int arcg, char* argv[])
 
 	player.x = (win_width / 2)-50;
 	player.y = 830;
+	player.a = PLAYER_JUMP_SPEED;
 	player.isJump = false;
 	player.isFlip = false;
 
@@ -282,8 +288,15 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
-			PlayerMovement();
+			if ((player.a >= PLAYER_JUMP_SPEED-4) || (player.a <= (PLAYER_JUMP_SPEED - 4)*-1)) player.isJump = true;
+			else player.isJump = false;
+
+			if (player.isJump) playercondition = { 125, 0, 100, 120 };
+			else playercondition = { 0, 0, 100, 120 };
+			
 			playerposition = { player.x, player.y, 100, 120 };
+			
+			PlayerMovement();
 		}
 
 		else
@@ -309,7 +322,7 @@ int main(int arcg, char* argv[])
 
 		SDL_RenderPresent(render);
 
-		SDL_Delay(10);
+		SDL_Delay(25);
 	#pragma endregion 
 	
 	}

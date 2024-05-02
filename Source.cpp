@@ -5,8 +5,13 @@
 #include <Menu.h>
 #include <Game.h>
 
+#pragma region GLOBALINIT
+
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
+
+Player player;
+
 
 int win_width = 630, win_height = 950;
 
@@ -22,6 +27,8 @@ bool isRightPressed = false;
 bool isLeftPressed = false;
 bool isUpPressed = false;
 bool isDownPressed = false;
+
+#pragma endregion
 
 void DeInit(int error)
 {
@@ -83,13 +90,24 @@ void Init()
 
 }
 
-void WorkWithKeys()
+void PlayerMovement()
 { 
-	//Действия с зажатыми клавишами
-	if (isUpPressed && !isDownPressed) y -= 5;
-	if (!isUpPressed && isDownPressed) y += 5;
-	if (isRightPressed && !isLeftPressed) x += 5;
-	if (!isRightPressed && isLeftPressed) x -= 5;
+	
+
+
+	if (player.x > (win_width + 50)) player.x = -100;
+	if (player.x < -100) player.x = win_width + 50;
+
+	if (isRightPressed && !isLeftPressed)
+	{
+		player.x += 5;
+		player.isFlip = true;
+	}
+	if (!isRightPressed && isLeftPressed)
+	{
+		player.x -= 5;
+		player.isFlip = false;
+	}
 }
 
 
@@ -133,6 +151,22 @@ int main(int arcg, char* argv[])
 	CreateBackground(render, background, bck);
 
 	SDL_Rect rectbckcondition = { 0,0,630,950 };
+
+
+
+	player.x = (win_width / 2)-50;
+	player.y = 830;
+	player.isJump = false;
+	player.isFlip = false;
+
+	SDL_Surface* playersurf;
+	SDL_Texture* playertexture;
+
+	CreatePlayer(render, playersurf, playertexture);
+
+	SDL_Rect playercondition = {0,0, 100, 120};
+	SDL_Rect playerposition = {player.x, player.y, 100, 120};
+
 #pragma endregion
 
 
@@ -204,22 +238,17 @@ int main(int arcg, char* argv[])
 				case SDL_SCANCODE_ESCAPE: //Клавиша ESC
 					isRunning = false;
 					break;
-				
-				case SDL_SCANCODE_RIGHT: //Клавиша стрелка вправо
-					
-					isRightPressed = true;
-					break;
-				case SDL_SCANCODE_LEFT: //Клавиша стрелка влево
-					
-					isLeftPressed = true;
-					break;
-				case SDL_SCANCODE_UP: //Клавиша стрелка вверх
-					
+				case SDL_SCANCODE_W: //Клавиша стрелка вверх
 					isUpPressed = true;
 					break;
-				case SDL_SCANCODE_DOWN: //Клавиша стрелка вниз
-					
+				case SDL_SCANCODE_A: //Клавиша стрелка влево
+					isLeftPressed = true;
+					break;
+				case SDL_SCANCODE_S: //Клавиша стрелка вниз
 					isDownPressed = true;
+					break;
+				case SDL_SCANCODE_D: //Клавиша стрелка вправо
+					isRightPressed = true;
 					break;
 				}
 				break;
@@ -227,17 +256,17 @@ int main(int arcg, char* argv[])
 			case SDL_KEYUP: //Обработка отпускания клавиш клавиатуры
 				switch (ev.key.keysym.scancode)
 				{
-				case SDL_SCANCODE_RIGHT: //Клавиша стрелка вправо
-					isRightPressed = false;
-					break;
-				case SDL_SCANCODE_LEFT: //Клавиша стрелка влево
-					isLeftPressed = false;
-					break;
-				case SDL_SCANCODE_UP: //Клавиша стрелка вверх
+				case SDL_SCANCODE_W: //Клавиша стрелка вверх
 					isUpPressed = false;
 					break;
-				case SDL_SCANCODE_DOWN: //Клавиша стрелка вниз
+				case SDL_SCANCODE_A: //Клавиша стрелка влево
+					isLeftPressed = false;
+					break;
+				case SDL_SCANCODE_S: //Клавиша стрелка вниз
 					isDownPressed = false;
+					break;
+				case SDL_SCANCODE_D: //Клавиша стрелка вправо
+					isRightPressed = false;
 					break;
 				}
 				break;
@@ -252,6 +281,9 @@ int main(int arcg, char* argv[])
 		if (isGame)
 		{
 			Mix_PauseMusic();
+			
+			PlayerMovement();
+			playerposition = { player.x, player.y, 100, 120 };
 		}
 
 		else
@@ -268,6 +300,7 @@ int main(int arcg, char* argv[])
 		if(isGame)
 		{
 			DrawBackground(render, bck, rectbckcondition);
+			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 		}
 		else
 		{
@@ -276,17 +309,25 @@ int main(int arcg, char* argv[])
 
 		SDL_RenderPresent(render);
 
-		SDL_Delay(100);
+		SDL_Delay(10);
 	#pragma endregion 
 	
 	}
 
 #pragma endregion
 
+
+
+#pragma region DESTRUCTION
+	
 	MainMenuDestroy(menu, plbutton, sttngsbutton);
 	DestroyGame(bck);
+	DestroyPlayer(playertexture);
 	Mix_CloseAudio();
 	
 	DeInit(0);
+
+#pragma endregion
+	
 	return 0;
 }

@@ -6,6 +6,7 @@ struct Player
 	int a;
 	bool isJump;
 	bool isFlip;
+	int score;
 };
 
 void CreatePlayer(SDL_Renderer* render, SDL_Surface*& playersurf, SDL_Texture*& playertexture);

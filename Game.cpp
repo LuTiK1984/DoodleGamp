@@ -9,6 +9,7 @@ struct Player
 	int a;
 	bool isJump;
 	bool isFlip;
+	int score;
 };
 
 

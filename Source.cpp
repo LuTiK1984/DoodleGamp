@@ -158,12 +158,12 @@ int main(int arcg, char* argv[])
 	SDL_Rect rectbckcondition = { 0,0,630,950 };
 
 
-
 	player.x = (win_width / 2)-50;
 	player.y = 830;
 	player.a = PLAYER_JUMP_SPEED;
 	player.isJump = false;
 	player.isFlip = false;
+	player.score = 0;
 
 	SDL_Surface* playersurf;
 	SDL_Texture* playertexture;

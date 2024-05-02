@@ -7,3 +7,5 @@ void MainMenuDraw(SDL_Renderer* render, SDL_Texture* menu, SDL_Texture* plbutton
 void MainMenuDestroy(SDL_Texture* menu, SDL_Texture* plbutton, SDL_Texture* sttngsbutton);
 
 void VolumeSettings(bool IsUpPressed, bool IsDownPressed, int& VolumeMusic);
+
+void CreateSettings(SDL_Renderer* render, SDL_Surface*& volumesurf, SDL_Texture*& volumetexture);

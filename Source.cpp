@@ -24,10 +24,12 @@ int mouseclick_y = 0;
 
 int x, y;
 
+int Volume = 128;
+
 bool isRightPressed = false;
 bool isLeftPressed = false;
-bool isUpPressed = false;
-bool isDownPressed = false;
+bool isEPressed = false;
+bool isQPressed = false;
 
 #pragma endregion
 
@@ -133,6 +135,15 @@ int main(int arcg, char* argv[])
 	SDL_Texture* sttngsbutton;
 
 	CreateMenu(render, mainmenu, menu, playbutton, plbutton, settingsbutton, sttngsbutton);
+
+	SDL_Surface* volumesurf;
+	SDL_Texture* volumetexture;
+
+	CreateSettings(render, volumesurf, volumetexture);
+
+	SDL_Rect volumerect = { (win_width/2)-165,0,330,109 };
+	SDL_Rect EmptyVolumeBar = { (win_width / 2) - 165 , 115, 256, 50};
+	SDL_Rect FilledVolumeBar = { (win_width / 2) - 165 , 115, 256, 50 };
 
 	SDL_Rect srsrectmenu = { 0, 0, 630, 950 };
 	SDL_Rect rectmenucondition = { 641,0,630,950 };
@@ -253,14 +264,14 @@ int main(int arcg, char* argv[])
 				case SDL_SCANCODE_ESCAPE: //Клавиша ESC
 					isRunning = false;
 					break;
-				case SDL_SCANCODE_W: //Клавиша стрелка вверх
-					isUpPressed = true;
+				case SDL_SCANCODE_E: //Клавиша стрелка вверх
+					isEPressed = true;
 					break;
 				case SDL_SCANCODE_A: //Клавиша стрелка влево
 					isLeftPressed = true;
 					break;
-				case SDL_SCANCODE_S: //Клавиша стрелка вниз
-					isDownPressed = true;
+				case SDL_SCANCODE_Q: //Клавиша стрелка вниз
+					isQPressed = true;
 					break;
 				case SDL_SCANCODE_D: //Клавиша стрелка вправо
 					isRightPressed = true;
@@ -271,14 +282,14 @@ int main(int arcg, char* argv[])
 			case SDL_KEYUP: //Обработка отпускания клавиш клавиатуры
 				switch (ev.key.keysym.scancode)
 				{
-				case SDL_SCANCODE_W: //Клавиша стрелка вверх
-					isUpPressed = false;
+				case SDL_SCANCODE_E: //Клавиша стрелка вверх
+					isEPressed = false;
 					break;
 				case SDL_SCANCODE_A: //Клавиша стрелка влево
 					isLeftPressed = false;
 					break;
-				case SDL_SCANCODE_S: //Клавиша стрелка вниз
-					isDownPressed = false;
+				case SDL_SCANCODE_Q: //Клавиша стрелка вниз
+					isQPressed = false;
 					break;
 				case SDL_SCANCODE_D: //Клавиша стрелка вправо
 					isRightPressed = false;
@@ -318,6 +329,15 @@ int main(int arcg, char* argv[])
 		else
 		{
 			Mix_ResumeMusic();
+
+			if (isSettings)
+			{
+				if (FilledVolumeBar.w > 258) FilledVolumeBar.w = 258;
+				if (FilledVolumeBar.w < 0) FilledVolumeBar.w = 0;
+				if (isEPressed && !isQPressed) FilledVolumeBar.w += 4;
+				if (!isEPressed && isQPressed) FilledVolumeBar.w -= 4;
+				VolumeSettings(isEPressed,isQPressed, Volume);
+			}
 		}
 	#pragma endregion
 
@@ -333,8 +353,19 @@ int main(int arcg, char* argv[])
 		}
 		else
 		{
-			if (!isSettings) MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton, rectmenucondition, srsrectmenu);
-			else DrawBackground(render, bck, rectbckcondition);
+			if (!isSettings)
+			{
+				MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton, rectmenucondition, srsrectmenu);
+			}
+			else
+			{
+				DrawBackground(render, bck, rectbckcondition);
+				SDL_RenderCopy(render, volumetexture,NULL, &volumerect);
+				SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+				SDL_RenderDrawRect(render, &EmptyVolumeBar);
+				SDL_SetRenderDrawColor(render, 178, 0, 0, 255);
+				SDL_RenderFillRect(render, &FilledVolumeBar);
+			}
 		}
 
 		SDL_RenderPresent(render);

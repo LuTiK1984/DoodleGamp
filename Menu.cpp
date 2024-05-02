@@ -61,7 +61,7 @@ void VolumeSettings(bool IsUpPressed, bool IsDownPressed, int &VolumeMusic)
 {
 	if (IsUpPressed) {
 		if (VolumeMusic < MIX_MAX_VOLUME)
-			VolumeMusic += 1;
+			VolumeMusic += 2;
 		else
 			VolumeMusic = MIX_MAX_VOLUME;
 		Mix_VolumeMusic(VolumeMusic);
@@ -70,12 +70,23 @@ void VolumeSettings(bool IsUpPressed, bool IsDownPressed, int &VolumeMusic)
 		if (VolumeMusic == 0)
 			VolumeMusic = 0;
 		else
-			VolumeMusic -= 1;
+			VolumeMusic -= 2;
 		Mix_VolumeMusic(VolumeMusic);
+
 	}
 }
 
-void DrawSettings()
+void CreateSettings(SDL_Renderer* render, SDL_Surface* &volumesurf, SDL_Texture* &volumetexture)
 {
+	volumesurf = IMG_Load("sprites/volume.png");
+	volumetexture = SDL_CreateTextureFromSurface(render, volumesurf);
 
+	if (volumesurf == NULL)
+	{
+		printf("Couldn`t load volume text! Error: %s", SDL_GetError());
+		system("pause");
+		exit(1);
+	}
+
+	SDL_FreeSurface(volumesurf);
 }

@@ -6,7 +6,7 @@
 #include <Game.h>
 
 #pragma region GLOBALINIT
-#define PLAYER_JUMP_SPEED 32
+#define PLAYER_JUMP_SPEED 40
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -142,8 +142,8 @@ int main(int arcg, char* argv[])
 	CreateSettings(render, volumesurf, volumetexture);
 
 	SDL_Rect volumerect = { (win_width/2)-165,0,330,109 };
-	SDL_Rect EmptyVolumeBar = { (win_width / 2) - 165 , 115, 256, 50};
-	SDL_Rect FilledVolumeBar = { (win_width / 2) - 165 , 115, 256, 50 };
+	SDL_Rect EmptyVolumeBar = { (win_width / 2) - 136 , 114, 258, 52};
+	SDL_Rect FilledVolumeBar = { (win_width / 2) - 135 , 115, 256, 50 };
 
 	SDL_Rect srsrectmenu = { 0, 0, 630, 950 };
 	SDL_Rect rectmenucondition = { 641,0,630,950 };
@@ -332,7 +332,7 @@ int main(int arcg, char* argv[])
 
 			if (isSettings)
 			{
-				if (FilledVolumeBar.w > 258) FilledVolumeBar.w = 258;
+				if (FilledVolumeBar.w > 256) FilledVolumeBar.w = 256;
 				if (FilledVolumeBar.w < 0) FilledVolumeBar.w = 0;
 				if (isEPressed && !isQPressed) FilledVolumeBar.w += 4;
 				if (!isEPressed && isQPressed) FilledVolumeBar.w -= 4;
@@ -361,10 +361,10 @@ int main(int arcg, char* argv[])
 			{
 				DrawBackground(render, bck, rectbckcondition);
 				SDL_RenderCopy(render, volumetexture,NULL, &volumerect);
-				SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
-				SDL_RenderDrawRect(render, &EmptyVolumeBar);
 				SDL_SetRenderDrawColor(render, 178, 0, 0, 255);
 				SDL_RenderFillRect(render, &FilledVolumeBar);
+				SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+				SDL_RenderDrawRect(render, &EmptyVolumeBar);
 			}
 		}
 

@@ -59,7 +59,7 @@ void DrawBackground(SDL_Renderer* render, SDL_Texture* bck, SDL_Rect &rectbckcon
 	SDL_RenderCopy(render, bck, &rectbckcondition, NULL);
 }
 
-void DestroyGame(SDL_Texture* bck)
+void DestroyBackground(SDL_Texture* bck)
 {
 	SDL_DestroyTexture(bck);
 }

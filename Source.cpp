@@ -168,6 +168,7 @@ int main(int arcg, char* argv[])
 	SDL_Surface* playersurf;
 	SDL_Texture* playertexture;
 
+	Mix_Chunk* jumpsfx = Mix_LoadWAV("sfx/jump.wav");
 	CreatePlayer(render, playersurf, playertexture);
 
 	SDL_Rect playercondition = {0,0, 100, 120};
@@ -182,6 +183,8 @@ int main(int arcg, char* argv[])
 	SDL_Event ev;
 	bool isRunning = true;
 	bool isGame = false;
+	bool Jumping = false;
+	bool isSettings = false;
 
 	Mix_PlayMusic(menumusic, -1);
 
@@ -194,8 +197,9 @@ int main(int arcg, char* argv[])
 			switch (ev.type)
 			{
 			case SDL_QUIT: //Выход из приложения (закрытие окна)
-				if (!isGame) isRunning = false;
+				if (!isGame && !isSettings) isRunning = false;
 				isGame = false;
+				isSettings = false;
 				break;
 
 
@@ -208,6 +212,11 @@ int main(int arcg, char* argv[])
 					if ((mouseclick_x >= 120 && mouseclick_x <= 343) && (mouseclick_y >= 380 && mouseclick_y <= 462))
 					{
 						isGame = true;
+					}
+
+					if ((mouseclick_x >= 500 && mouseclick_x <= 615) && (mouseclick_y >= 750 && mouseclick_y <= 845))
+					{
+						isSettings = true;
 					}
 				}
 				break;
@@ -288,10 +297,17 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
-			if ((player.a >= PLAYER_JUMP_SPEED-4) || (player.a <= (PLAYER_JUMP_SPEED - 4)*-1)) player.isJump = true;
+			if ((player.a >= PLAYER_JUMP_SPEED - 4) || (player.a <= (PLAYER_JUMP_SPEED - 4) * -1))
+			{
+				player.isJump = true;
+			}
 			else player.isJump = false;
 
-			if (player.isJump) playercondition = { 125, 0, 100, 120 };
+			if (player.isJump) 
+			{ 
+				playercondition = { 125, 0, 100, 120 }; 
+				if(player.a == (PLAYER_JUMP_SPEED - 4) * -1) Mix_PlayChannel(1, jumpsfx, 0);
+			}
 			else playercondition = { 0, 0, 100, 120 };
 			
 			playerposition = { player.x, player.y, 100, 120 };
@@ -317,7 +333,8 @@ int main(int arcg, char* argv[])
 		}
 		else
 		{
-			MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton, rectmenucondition, srsrectmenu);
+			if (!isSettings) MainMenuDraw(render, menu, plbutton, sttngsbutton, rectplbuttoncondition, srsrectplbutton, rectsttngsbuttoncondition, srsrectsttngsbutton, rectmenucondition, srsrectmenu);
+			else DrawBackground(render, bck, rectbckcondition);
 		}
 
 		SDL_RenderPresent(render);
@@ -334,7 +351,7 @@ int main(int arcg, char* argv[])
 #pragma region DESTRUCTION
 	
 	MainMenuDestroy(menu, plbutton, sttngsbutton);
-	DestroyGame(bck);
+	DestroyBackground(bck);
 	DestroyPlayer(playertexture);
 	Mix_CloseAudio();
 	

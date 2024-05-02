@@ -56,3 +56,26 @@ void MainMenuDestroy(SDL_Texture* menu, SDL_Texture* plbutton, SDL_Texture* sttn
 	SDL_DestroyTexture(menu);
 	SDL_DestroyTexture(sttngsbutton);
 }
+
+void VolumeSettings(bool IsUpPressed, bool IsDownPressed, int &VolumeMusic)
+{
+	if (IsUpPressed) {
+		if (VolumeMusic < MIX_MAX_VOLUME)
+			VolumeMusic += 1;
+		else
+			VolumeMusic = MIX_MAX_VOLUME;
+		Mix_VolumeMusic(VolumeMusic);
+	}
+	if (IsDownPressed) {
+		if (VolumeMusic == 0)
+			VolumeMusic = 0;
+		else
+			VolumeMusic -= 1;
+		Mix_VolumeMusic(VolumeMusic);
+	}
+}
+
+void DrawSettings()
+{
+
+}

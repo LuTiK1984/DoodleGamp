@@ -65,6 +65,7 @@ void VolumeSettings(bool IsUpPressed, bool IsDownPressed, int &VolumeMusic)
 		else
 			VolumeMusic = MIX_MAX_VOLUME;
 		Mix_VolumeMusic(VolumeMusic);
+		Mix_MasterVolume(VolumeMusic);
 	}
 	if (IsDownPressed) {
 		if (VolumeMusic == 0)
@@ -72,7 +73,7 @@ void VolumeSettings(bool IsUpPressed, bool IsDownPressed, int &VolumeMusic)
 		else
 			VolumeMusic -= 2;
 		Mix_VolumeMusic(VolumeMusic);
-
+		Mix_MasterVolume(VolumeMusic);
 	}
 }
 

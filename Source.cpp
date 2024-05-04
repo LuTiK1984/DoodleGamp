@@ -7,6 +7,7 @@
 
 #pragma region GLOBALINIT
 #define PLAYER_JUMP_SPEED 40
+#define FIXED_Y 650
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -18,6 +19,8 @@ int win_width = 630, win_height = 950;
 
 int mouse_x = 0;
 int mouse_y = 0;
+
+int winspeed = 0;
 
 int mouseclick_x = 0;
 int mouseclick_y = 0;
@@ -170,7 +173,7 @@ int main(int arcg, char* argv[])
 
 
 	player.x = (win_width / 2)-50;
-	player.y = 830;
+	player.y = FIXED_Y;
 	player.a = PLAYER_JUMP_SPEED;
 	player.isJump = false;
 	player.isFlip = false;
@@ -184,6 +187,9 @@ int main(int arcg, char* argv[])
 
 	SDL_Rect playercondition = {0,0, 100, 120};
 	SDL_Rect playerposition = {player.x, player.y, 100, 120};
+
+	SDL_Rect islam = {200,400, 50,10};
+	SDL_Rect islam2 = { 340,600, 50,10 };
 
 #pragma endregion
 
@@ -323,7 +329,23 @@ int main(int arcg, char* argv[])
 			
 			playerposition = { player.x, player.y, 100, 120 };
 			
+			
+
+			if (((player.x + playerposition.w >= islam2.x) && player.x <= (islam2.x+ islam2.w)) && (player.y + playerposition.h >= islam2.y) && ((player.y - player.a + playerposition.h) < islam2.y))
+			{
+				player.y = islam2.y - playerposition.h;
+				player.a = PLAYER_JUMP_SPEED;
+			}
+			
+			if (((player.x + playerposition.w >= islam.x) && player.x <= (islam.x + islam.w)) && (player.y + playerposition.h >= islam.y) && ((player.y - player.a + playerposition.h) < islam.y))
+			{
+				player.y = islam.y - playerposition.h;
+				player.a = PLAYER_JUMP_SPEED;
+			}
+
 			PlayerMovement();
+
+			
 		}
 
 		else
@@ -332,10 +354,10 @@ int main(int arcg, char* argv[])
 
 			if (isSettings)
 			{
-				if (FilledVolumeBar.w > 256) FilledVolumeBar.w = 256;
-				if (FilledVolumeBar.w < 0) FilledVolumeBar.w = 0;
 				if (isEPressed && !isQPressed) FilledVolumeBar.w += 4;
 				if (!isEPressed && isQPressed) FilledVolumeBar.w -= 4;
+				if (FilledVolumeBar.w > 256) FilledVolumeBar.w = 256;
+				if (FilledVolumeBar.w < 0) FilledVolumeBar.w = 0;
 				VolumeSettings(isEPressed,isQPressed, Volume);
 			}
 		}
@@ -350,6 +372,10 @@ int main(int arcg, char* argv[])
 		{
 			DrawBackground(render, bck, rectbckcondition);
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
+			SDL_SetRenderDrawColor(render, 170, 0, 0, 255);
+			SDL_RenderFillRect(render, &islam);
+			SDL_RenderFillRect(render, &islam2);
+
 		}
 		else
 		{

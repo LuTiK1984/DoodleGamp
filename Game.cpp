@@ -91,16 +91,32 @@ void CreatePlatforms(SDL_Renderer* render, SDL_Surface* &platformsurf, SDL_Textu
 
 void GeneratePlatforms(Platform platforms[])
 {
+	int term_x = 0, term_y = 0;
+	int w = 110;
+	int h = 30;
 
 	for (int i = 0; i < 10; i++)
 	{
 		platforms[i].x = random(5, 510);
 		platforms[i].y = random(-100, 750);
-		platforms[i].w = 115;
-		platforms[i].h = 30;
-		platforms[i].type = 0;
-	}
 
+		if (((platforms[i].x + w) >= term_x) && ((term_x + w) <= platforms[i].x))
+		{
+			platforms[i].x += w;
+		}
+
+		if (((platforms[i].y + h) >= term_y) && ((term_y + h) <= platforms[i].y))
+		{
+			platforms[i].y += h;
+		}
+
+		platforms[i].w = w;
+		platforms[i].h = h;
+		platforms[i].type = 0;
+		
+		term_x = platforms[i].x;
+		term_y = platforms[i].y;
+	}
 }
 
 void DrawPlatforms(SDL_Renderer* render, SDL_Texture* platformtexture, SDL_Rect platformcondition, SDL_Rect platformposition)

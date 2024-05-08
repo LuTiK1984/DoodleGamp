@@ -73,7 +73,7 @@ void Init()
 		SDL_WINDOWPOS_CENTERED,
 		win_width,
 		win_height,
-		SDL_WINDOW_SHOWN 
+		SDL_WINDOW_SHOWN
 	);
 
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
@@ -97,15 +97,12 @@ void Init()
 
 }
 
-void PlayerMovement(SDL_Rect &playerposition, SDL_Rect islam2)
-{ 
+void PlayerMovement(SDL_Rect& playerposition, SDL_Rect islam2)
+{
 	if (((player.x + playerposition.w) >= islam2.x) && ((islam2.x + islam2.w) >= player.x))
 	{
-		if ((player.y + playerposition.h) < islam2.y)
-		{
-			if((player.y + playerposition.h - player.a) > islam2.y) player.a = PLAYER_JUMP_SPEED;
-			else player.a -= 2;
-		}
+		if (((player.y + playerposition.h) < islam2.y) && ((player.y + playerposition.h - player.a) > islam2.y)) player.a = PLAYER_JUMP_SPEED;
+		else player.a -= 2;
 	}
 
 	else

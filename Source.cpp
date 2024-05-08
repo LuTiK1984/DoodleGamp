@@ -99,17 +99,17 @@ void Init()
 
 void PlayerMovement(SDL_Rect& playerposition, SDL_Rect islam2)
 {
-	if (((player.x + playerposition.w) >= islam2.x) && ((islam2.x + islam2.w) >= player.x))
+	if (((player.x + playerposition.w) >= islam2.x) && ((islam2.x + islam2.w) >= player.x) && ((player.y + playerposition.h) < islam2.y) && ((player.y + playerposition.h - player.a) >= islam2.y))
 	{
-		if (((player.y + playerposition.h) < islam2.y) && ((player.y + playerposition.h - player.a) > islam2.y)) player.a = PLAYER_JUMP_SPEED;
+		if (((player.y + playerposition.h) < islam2.y) && ((player.y + playerposition.h - player.a) >= islam2.y)) player.a = PLAYER_JUMP_SPEED;
 		else player.a -= 2;
 	}
 
-	else
-	{
-		if ((player.y + playerposition.h - player.a) < FIXED_Y) player.a -= 2;
-		else player.a = PLAYER_JUMP_SPEED;
-	}
+	
+	else if ((player.y + playerposition.h - player.a) < FIXED_Y) player.a -= 2;
+	
+	else player.a = PLAYER_JUMP_SPEED;
+	
 	
 	player.y -= player.a;
 	

@@ -97,16 +97,16 @@ void Init()
 
 }
 
-void PlayerMovement(SDL_Rect& playerposition, SDL_Rect islam2)
+void PlayerMovement(SDL_Rect islam2)
 {
-	if (((player.x + playerposition.w) >= islam2.x) && ((islam2.x + islam2.w) >= player.x) && ((player.y + playerposition.h) < islam2.y) && ((player.y + playerposition.h - player.a) >= islam2.y))
+	if (((player.x + player.w) >= islam2.x) && ((islam2.x + islam2.w) >= player.x) && ((player.y + player.h) < islam2.y) && ((player.y + player.h - player.a) >= islam2.y))
 	{
-		if (((player.y + playerposition.h) < islam2.y) && ((player.y + playerposition.h - player.a) >= islam2.y)) player.a = PLAYER_JUMP_SPEED;
+		if (((player.y + player.h) < islam2.y) && ((player.y + player.h - player.a) > islam2.y)) player.a = PLAYER_JUMP_SPEED;
 		else player.a -= 2;
 	}
 
 	
-	else if ((player.y + playerposition.h - player.a) < FIXED_Y) player.a -= 2;
+	else if ((player.y + player.h - player.a) < FIXED_Y) player.a -= 2;
 	
 	else player.a = PLAYER_JUMP_SPEED;
 	
@@ -186,6 +186,8 @@ int main(int arcg, char* argv[])
 
 	player.x = (win_width / 2)-50;
 	player.y = FIXED_Y;
+	player.w = 65;
+	player.h = 90;
 	player.a = PLAYER_JUMP_SPEED;
 	player.isJump = false;
 	player.isFlip = false;
@@ -197,7 +199,7 @@ int main(int arcg, char* argv[])
 	CreatePlayer(render, playersurf, playertexture);
 	
 
-	SDL_Rect playercondition = {0,0, 100, 120};
+	SDL_Rect playercondition = {0,30, 90, 90};
 	SDL_Rect playerposition = {player.x, player.y, 100, 120};
 
 	SDL_Rect islam = {200,400, 50,10};
@@ -355,7 +357,7 @@ int main(int arcg, char* argv[])
 			playerposition = { player.x, player.y, 100, 120 };
 			
 
-			PlayerMovement(playerposition, islam);
+			PlayerMovement(islam);
 			
 			
 		}

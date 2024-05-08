@@ -2,7 +2,7 @@
 
 struct Player
 {
-	int x, y;
+	int x, y, w, h;
 	int a;
 	bool isJump;
 	bool isFlip;

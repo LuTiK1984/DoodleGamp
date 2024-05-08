@@ -186,7 +186,7 @@ int main(int arcg, char* argv[])
 
 	player.x = (win_width / 2)-50;
 	player.y = FIXED_Y;
-	player.w = 65;
+	player.w = 90;
 	player.h = 90;
 	player.a = PLAYER_JUMP_SPEED;
 	player.isJump = false;
@@ -199,11 +199,10 @@ int main(int arcg, char* argv[])
 	CreatePlayer(render, playersurf, playertexture);
 	
 
-	SDL_Rect playercondition = {0,30, 90, 90};
+	SDL_Rect playercondition = {0,30, player.w, player.h};
 	SDL_Rect playerposition = {player.x, player.y, 100, 120};
 
-	SDL_Rect islam = {200,400, 50,10};
-	SDL_Rect islam2 = { 440,600, 50,10 };
+	SDL_Rect islam = {200,400, 100,30};
 
 	Mix_Chunk* jumpsfx = Mix_LoadWAV("sfx/jump.wav");
 
@@ -216,7 +215,7 @@ int main(int arcg, char* argv[])
 	GeneratePlatforms(platforms);
 
 	SDL_Rect platformcondition = { 315, 895, 115, 30 };
-	SDL_Rect platformposition = { 0, 0, 115, 30 };
+	SDL_Rect platformposition = { 0, 0, 110, 30 };
 
 #pragma endregion
 
@@ -386,8 +385,6 @@ int main(int arcg, char* argv[])
 		{
 			DrawBackground(render, bck, rectbckcondition);
 			SDL_SetRenderDrawColor(render, 170, 0, 0, 255);
-			SDL_RenderFillRect(render, &islam);
-			SDL_RenderFillRect(render, &islam2);
 			for (int i = 0; i < 10; i++)
 			{
 				platformposition.x = platforms[i].x;
@@ -395,6 +392,7 @@ int main(int arcg, char* argv[])
 				DrawPlatforms(render, platformtexture, platformcondition, platformposition);
 
 			}
+			SDL_RenderFillRect(render, &islam);
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 
 		}

@@ -7,12 +7,13 @@
 
 #pragma region GLOBALINIT
 #define PLAYER_JUMP_SPEED 40
-#define FIXED_Y 650
+#define FIXED_Y 750
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
 
 Player player;
+Platform platforms[10];
 
 
 int win_width = 630, win_height = 950;
@@ -96,11 +97,25 @@ void Init()
 
 }
 
-void PlayerMovement()
+void PlayerMovement(SDL_Rect &playerposition, SDL_Rect islam2)
 { 
-	if (player.a == (PLAYER_JUMP_SPEED + 2)*-1) player.a = PLAYER_JUMP_SPEED;
-	player.y -= player.a;
-	player.a -= 2;
+	if (((player.x + playerposition.w) >= islam2.x) && ((islam2.x + islam2.w) > player.x))
+	{
+		if (((player.y + playerposition.h) >= islam2.y) && (islam2.y < player.y))
+		{
+			if ((player.y + playerposition.h) < islam2.y) player.a -= 2;
+			else player.a = PLAYER_JUMP_SPEED;
+		}
+
+	}
+
+	else
+	{
+		if ((player.y + playerposition.h) < FIXED_Y) player.a -= 2;
+		else player.a = PLAYER_JUMP_SPEED;
+	}
+	
+		player.y -= player.a;
 	
 	
 
@@ -124,6 +139,7 @@ void PlayerMovement()
 
 int main(int arcg, char* argv[])
 {
+	srand(time(NULL));
 	system("chcp 1251");
 	Init();
 
@@ -182,14 +198,27 @@ int main(int arcg, char* argv[])
 	SDL_Surface* playersurf;
 	SDL_Texture* playertexture;
 
-	Mix_Chunk* jumpsfx = Mix_LoadWAV("sfx/jump.wav");
 	CreatePlayer(render, playersurf, playertexture);
+	
 
 	SDL_Rect playercondition = {0,0, 100, 120};
 	SDL_Rect playerposition = {player.x, player.y, 100, 120};
 
 	SDL_Rect islam = {200,400, 50,10};
-	SDL_Rect islam2 = { 340,600, 50,10 };
+	SDL_Rect islam2 = { 440,600, 50,10 };
+
+	Mix_Chunk* jumpsfx = Mix_LoadWAV("sfx/jump.wav");
+
+	SDL_Surface* platformsurf;
+	SDL_Texture* platformtexture;
+
+	CreatePlatforms(render, platformsurf, platformtexture);
+
+
+	GeneratePlatforms(platforms);
+
+	SDL_Rect platformcondition = { 315, 895, 115, 30 };
+	SDL_Rect platformposition = { 0, 0, 115, 30 };
 
 #pragma endregion
 
@@ -331,20 +360,10 @@ int main(int arcg, char* argv[])
 			
 			
 
-			if (((player.x + playerposition.w >= islam2.x) && player.x <= (islam2.x+ islam2.w)) && (player.y + playerposition.h >= islam2.y) && ((player.y - player.a + playerposition.h) < islam2.y))
-			{
-				player.y = islam2.y - playerposition.h;
-				player.a = PLAYER_JUMP_SPEED;
-			}
 			
-			if (((player.x + playerposition.w >= islam.x) && player.x <= (islam.x + islam.w)) && (player.y + playerposition.h >= islam.y) && ((player.y - player.a + playerposition.h) < islam.y))
-			{
-				player.y = islam.y - playerposition.h;
-				player.a = PLAYER_JUMP_SPEED;
-			}
 
-			PlayerMovement();
-
+			PlayerMovement(playerposition, islam2);
+			
 			
 		}
 
@@ -371,10 +390,17 @@ int main(int arcg, char* argv[])
 		if(isGame)
 		{
 			DrawBackground(render, bck, rectbckcondition);
-			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 			SDL_SetRenderDrawColor(render, 170, 0, 0, 255);
 			SDL_RenderFillRect(render, &islam);
 			SDL_RenderFillRect(render, &islam2);
+			for (int i = 0; i < 10; i++)
+			{
+				platformposition.x = platforms[i].x;
+				platformposition.y = platforms[i].y;
+				DrawPlatforms(render, platformtexture, platformcondition, platformposition);
+
+			}
+			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 
 		}
 		else

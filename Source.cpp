@@ -97,11 +97,11 @@ void Init()
 
 }
 
-void PlayerMovement(SDL_Rect islam2)
+void PlayerMovement(int i)
 {
-	if (((player.x + player.w) >= islam2.x) && ((islam2.x + islam2.w) >= player.x) && ((player.y + player.h) < islam2.y) && ((player.y + player.h - player.a) >= islam2.y))
+	if (((player.x + player.w) >= platforms[i].x) && ((platforms[i].x + platforms[i].w) >= player.x) && ((player.y + player.h) < platforms[i].y) && ((player.y + player.h - player.a) >= platforms[i].y))
 	{
-		if (((player.y + player.h) < islam2.y) && ((player.y + player.h - player.a) > islam2.y)) player.a = PLAYER_JUMP_SPEED;
+		if (((player.y + player.h) < platforms[i].y) && ((player.y + player.h - player.a) > platforms[i].y)) player.a = PLAYER_JUMP_SPEED;
 		else player.a -= 2;
 	}
 
@@ -355,8 +355,7 @@ int main(int arcg, char* argv[])
 			
 			playerposition = { player.x, player.y, 100, 120 };
 			
-
-			PlayerMovement(islam);
+			for(int i = 0; i < 10; i++) PlayerMovement(i);
 			
 			
 		}

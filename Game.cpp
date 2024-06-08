@@ -92,17 +92,29 @@ void CreatePlatforms(SDL_Renderer* render, SDL_Surface* &platformsurf, SDL_Textu
 void GeneratePlatforms(Platform platforms[])
 {
 	
-	SDL_
-	int term_x = 0, term_y = 0;
+	int term_x = random(5, 510), term_y = random(-100, 750);
 	int w = 110;
 	int h = 30;
+	SDL_Rect term[10] = {term_x, term_y, w, h};
 
 	for (int i = 0; i < 10; i++)
 	{
 		platforms[i].platformposition.x = random(5, 510);
 		platforms[i].platformposition.y = random(-100, 750);
+		
+		for (int j = i; j < 10; j++)
+		{
+			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]) == SDL_TRUE)
+			{
+				platforms[i].platformposition.x += random(w, w+w);
+				platforms[i].platformposition.y += random(h, h+h);
+			}
+		}
 
-		if (((platforms[i].platformposition.x + w) >= term_x) && ((term_x + w) <= platforms[i].platformposition.x))
+		
+
+
+		/*if (((platforms[i].platformposition.x + w) >= term.x) && ((term.x + w) <= platforms[i].platformposition.x))
 		{
 			platforms[i].platformposition.x += w;
 		}
@@ -110,14 +122,14 @@ void GeneratePlatforms(Platform platforms[])
 		if (((platforms[i].platformposition.y + h) >= term_y) && ((term_y + h) <= platforms[i].platformposition.y))
 		{
 			platforms[i].platformposition.y += h;
-		}
+		}*/
 
-		platforms[i].platformposition.w = w;
-		platforms[i].platformposition.h = h;
+		platforms[i].platformposition.w = term[i].w;
+		platforms[i].platformposition.h = term[i].h;
 		platforms[i].type = 0;
 		
-		term_x = platforms[i].platformposition.x;
-		term_y = platforms[i].platformposition.y;
+		term[i].x = platforms[i].platformposition.x;
+		term[i].y = platforms[i].platformposition.y;
 	}
 }
 

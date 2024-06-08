@@ -322,7 +322,7 @@ int main(int arcg, char* argv[])
 			{
 				if (SDL_HasIntersection(&platforms[i].platformposition, &playerposition))
 				{
-					if (((player.y + player.h) < platforms[i].platformposition.y) && ((player.y + player.h - player.a) > platforms[i].platformposition.y))
+					if (((player.y + player.h) <= platforms[i].platformposition.y) && ((player.y + player.h - player.a) >= platforms[i].platformposition.y))
 					{
 						player.a = PLAYER_JUMP_SPEED;
 						break;
@@ -409,7 +409,7 @@ int main(int arcg, char* argv[])
 		}
 
 		SDL_RenderPresent(render);
-		SDL_Delay(40);
+		SDL_Delay(35);
 	#pragma endregion 
 	
 	}

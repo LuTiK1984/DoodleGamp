@@ -91,33 +91,30 @@ void CreatePlatforms(SDL_Renderer* render, SDL_Surface* &platformsurf, SDL_Textu
 
 void GeneratePlatforms(Platform platforms[])
 {
-	
-	int term_x = 0, term_y = 0;
-	int w = 110;
-	int h = 30;
-	SDL_Rect term[10] = {term_x, term_y, w, h};
-
+	SDL_Rect term[10];
 	for (int i = 0; i < 10; i++)
 	{
-		term[i].x = random(5, 510);
-		term[i].y = random(-100, 750);
+		platforms[i].platformposition.x = random(5, 510);
+		platforms[i].platformposition.y = random(-100, 750);
+		platforms[i].platformposition.w = 110;
+		platforms[i].platformposition.h = 30;
 
+		term[i].x = platforms[i].platformposition.x;
+		term[i].y = platforms[i].platformposition.y;
+		term[i].w = platforms[i].platformposition.w;
+		term[i].h = platforms[i].platformposition.h;
+
+		platforms[i].type = 0;
 	}
 
 	for (int i = 0; i < 10; i++)
 	{
-		platforms[i].platformposition.x = term[i].x;
-		platforms[i].platformposition.y = term[i].y;
-		platforms[i].platformposition.w = term[i].w;
-		platforms[i].platformposition.h = term[i].h;
-		platforms[i].type = 0;
-
 		for (int j = i + 1; j < 10; j++)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-w,w);
-				platforms[i].platformposition.y += random(-h,h);
+				platforms[i].platformposition.x += random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
+				platforms[i].platformposition.y += random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
 				break;
 			}
 		}

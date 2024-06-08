@@ -166,8 +166,6 @@ int main(int arcg, char* argv[])
 	SDL_Rect playercondition = {0,30, player.w, player.h};
 	SDL_Rect playerposition = {player.x, player.y, 100, 120};
 
-	SDL_Rect islam = {200,400, 100,30};
-
 	Mix_Chunk* jumpsfx = Mix_LoadWAV("sfx/jump.wav");
 
 	SDL_Surface* platformsurf;
@@ -389,7 +387,6 @@ int main(int arcg, char* argv[])
 
 			}
 
-			SDL_RenderFillRect(render, &islam);
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 
 		}

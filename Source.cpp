@@ -422,6 +422,7 @@ int main(int arcg, char* argv[])
 	
 	MainMenuDestroy(menu, plbutton, sttngsbutton);
 	DestroyBackground(bck);
+	DestroyPlatforms(platformtexture);
 	DestroyPlayer(playertexture);
 	Mix_CloseAudio();
 	

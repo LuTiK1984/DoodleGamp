@@ -91,6 +91,8 @@ void CreatePlatforms(SDL_Renderer* render, SDL_Surface* &platformsurf, SDL_Textu
 
 void GeneratePlatforms(Platform platforms[])
 {
+	
+	SDL_
 	int term_x = 0, term_y = 0;
 	int w = 110;
 	int h = 30;
@@ -122,4 +124,9 @@ void GeneratePlatforms(Platform platforms[])
 void DrawPlatforms(SDL_Renderer* render, SDL_Texture* platformtexture, SDL_Rect platformcondition, SDL_Rect platformposition)
 {
 	SDL_RenderCopy(render, platformtexture, &platformcondition, &platformposition);
+}
+
+void DestroyPlatforms(SDL_Texture* platform)
+{
+	SDL_DestroyTexture(platform);
 }

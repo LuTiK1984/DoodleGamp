@@ -316,7 +316,6 @@ int main(int arcg, char* argv[])
 			}
 			else playercondition = { 0, 0, 100, 120 };
 			
-			playerposition = { player.x, player.y, 100, 120 };
 			
 			for (int i = 0; i < 10; i++)
 			{
@@ -339,22 +338,23 @@ int main(int arcg, char* argv[])
 
 				}
 			}
-					player.y -= player.a;
+			player.y -= player.a;
 				
-				if (player.x > (win_width + 50)) player.x = -100;
-				if (player.x < -100) player.x = win_width + 50;
+			if (player.x > (win_width + 50)) player.x = -100;
+			if (player.x < -100) player.x = win_width + 50;
 
-				if (isRightPressed && !isLeftPressed)
-				{
-					player.x += 10;
-					player.isFlip = true;
-				}
-				if (!isRightPressed && isLeftPressed)
-				{
-					player.x -= 10;
-					player.isFlip = false;
-				}
+			if (isRightPressed && !isLeftPressed)
+			{
+				player.x += 10;
+				player.isFlip = true;
+			}
+			if (!isRightPressed && isLeftPressed)
+			{
+				player.x -= 10;
+				player.isFlip = false;
+			}
 			
+			playerposition = { player.x, player.y, 100, 120 };
 			
 		}
 
@@ -382,11 +382,13 @@ int main(int arcg, char* argv[])
 		{
 			DrawBackground(render, bck, rectbckcondition);
 			SDL_SetRenderDrawColor(render, 170, 0, 0, 255);
+			
 			for (int i = 0; i < 10; i++)
 			{
 				DrawPlatforms(render, platformtexture, platformcondition, platforms[i].platformposition);
 
 			}
+
 			SDL_RenderFillRect(render, &islam);
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 

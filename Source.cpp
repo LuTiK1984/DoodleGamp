@@ -6,7 +6,7 @@
 #include <Game.h>
 
 #pragma region GLOBALINIT
-#define PLAYER_JUMP_SPEED 100
+#define PLAYER_JUMP_SPEED 35
 #define FIXED_Y 850
 
 SDL_Window* win = NULL;
@@ -301,41 +301,32 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
-			if ((player.a >= PLAYER_JUMP_SPEED) || (player.a <= (PLAYER_JUMP_SPEED) * -1))
-			{
-				player.isJump = true;
-			}
-			else player.isJump = false;
+			
+			
 
 			if (player.isJump) 
 			{ 
 				playercondition = { 125, 0, 100, 120 }; 
-				if(player.a == PLAYER_JUMP_SPEED) Mix_PlayChannel(1, jumpsfx, 0);
+				Mix_PlayChannel(1, jumpsfx, 0);
 			}
 			else playercondition = { 0, 0, 100, 120 };
 			
 			
 			for (int i = 0; i < 10; i++)
 			{
-				if (SDL_HasIntersection(&platforms[i].platformposition, &playerposition))
+				if (SDL_HasIntersection(&platforms[i].platformposition, &player.movementbox))
 				{
-					if (((player.y + player.h) <= platforms[i].platformposition.y) && ((player.y + player.h - player.a) >= platforms[i].platformposition.y))
-					{
-						player.a = PLAYER_JUMP_SPEED;
-						break;
-
-					}
-					else player.a -= 1;
+					player.isJump = true;
+					player.a = PLAYER_JUMP_SPEED;
+					player.y = platforms[i].platformposition.y - player.h;
+					break;
 				}
-				else
-				{
-					if ((player.y + player.h - player.a) < FIXED_Y) player.a -= 1;
-
-					else player.a = PLAYER_JUMP_SPEED;
-
-
-				}
+				else player.isJump = false;
+				
 			}
+			
+			player.a -= 2;	
+
 			player.y -= player.a;
 				
 			if (player.x > (win_width + 50)) player.x = -100;
@@ -352,7 +343,8 @@ int main(int arcg, char* argv[])
 				player.isFlip = false;
 			}
 			
-			playerposition = { player.x, player.y, 100, 120 };
+			playerposition = { player.x, player.y-20, 100, 120 };
+			player.movementbox = { player.x+25, player.y+110, 50, 10 };
 			
 		}
 
@@ -386,7 +378,6 @@ int main(int arcg, char* argv[])
 				DrawPlatforms(render, platformtexture, platformcondition, platforms[i].platformposition);
 
 			}
-
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 
 		}
@@ -408,7 +399,7 @@ int main(int arcg, char* argv[])
 		}
 
 		SDL_RenderPresent(render);
-		SDL_Delay(35);
+		SDL_Delay(30);
 	#pragma endregion 
 	
 	}

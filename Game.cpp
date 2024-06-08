@@ -6,6 +6,7 @@
 struct Player
 {
 	int x, y, w, h;
+	SDL_Rect movementbox = { x,y,55,10 };
 	int a;
 	bool isJump;
 	bool isFlip;
@@ -94,17 +95,36 @@ void GeneratePlatforms(Platform platforms[])
 	SDL_Rect term[10];
 	for (int i = 0; i < 10; i++)
 	{
-		platforms[i].platformposition.x = random(5, 510);
-		platforms[i].platformposition.y = random(-100, 750);
-		platforms[i].platformposition.w = 110;
-		platforms[i].platformposition.h = 30;
+		if (i == 0)
+		{
+			platforms[i].platformposition.x = (630 / 2) - 50;
+			platforms[i].platformposition.y = 850;
+			platforms[i].platformposition.w = 110;
+			platforms[i].platformposition.h = 30;
+			
+			term[i].x = platforms[i].platformposition.x;
+			term[i].y = platforms[i].platformposition.y;
+			term[i].w = platforms[i].platformposition.w;
+			term[i].h = platforms[i].platformposition.h;
 
-		term[i].x = platforms[i].platformposition.x;
-		term[i].y = platforms[i].platformposition.y;
-		term[i].w = platforms[i].platformposition.w;
-		term[i].h = platforms[i].platformposition.h;
+			platforms[i].type = 0;
+		}
+		
+		else
+		{
 
-		platforms[i].type = 0;
+			platforms[i].platformposition.x = random(5, 510);
+			platforms[i].platformposition.y = random(-100, 750);
+			platforms[i].platformposition.w = 110;
+			platforms[i].platformposition.h = 30;
+
+			term[i].x = platforms[i].platformposition.x;
+			term[i].y = platforms[i].platformposition.y;
+			term[i].w = platforms[i].platformposition.w;
+			term[i].h = platforms[i].platformposition.h;
+
+			platforms[i].type = 0;
+		}
 	}
 
 	for (int i = 0; i < 10; i++)

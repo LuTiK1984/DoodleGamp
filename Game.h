@@ -3,6 +3,7 @@
 struct Player
 {
 	int x, y, w, h;
+	SDL_Rect movementbox = {x,y,55,10};
 	int a;
 	bool isJump;
 	bool isFlip;

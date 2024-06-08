@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#define NUM_OF_PLATFORMS 15
 
 struct Player
 {
@@ -93,7 +94,7 @@ void CreatePlatforms(SDL_Renderer* render, SDL_Surface* &platformsurf, SDL_Textu
 void GeneratePlatforms(Platform platforms[], int num)
 {
 ;
-	SDL_Rect term[30];
+	SDL_Rect term[NUM_OF_PLATFORMS];
 	for (int i = 0; i < num; i++)
 	{
 		if (i == 0)

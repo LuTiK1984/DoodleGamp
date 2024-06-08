@@ -32,7 +32,7 @@ int random(int min, int max);
 
 void CreatePlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_Texture*& platformtexture);
 
-void GeneratePlatforms(Platform platforms[]);
+void GeneratePlatforms(Platform platforms[], int num);
 
 void DrawPlatforms(SDL_Renderer* render, SDL_Texture* platformtexture, SDL_Rect platformcondition, SDL_Rect platformposition);
 

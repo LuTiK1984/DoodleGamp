@@ -8,12 +8,13 @@
 #pragma region GLOBALINIT
 #define PLAYER_JUMP_SPEED 40
 #define FIXED_Y 850
+#define NUM_OF_PLATFORMS 15
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
 
 Player player;
-Platform platforms[10];
+Platform platforms[NUM_OF_PLATFORMS];
 
 
 int win_width = 630, win_height = 950;
@@ -174,7 +175,7 @@ int main(int arcg, char* argv[])
 	CreatePlatforms(render, platformsurf, platformtexture);
 
 
-	GeneratePlatforms(platforms);
+	GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
 
 	SDL_Rect platformcondition = { 315, 895, 115, 30 };
 
@@ -301,9 +302,6 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
-			
-			
-
 			if (player.isJump) 
 			{ 
 				playercondition = { 125, 0, 100, 120 }; 
@@ -312,7 +310,7 @@ int main(int arcg, char* argv[])
 			else playercondition = { 0, 0, 100, 120 };
 			
 			
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 			{
 				if (SDL_HasIntersection(&platforms[i].platformposition, &player.movementbox))
 				{
@@ -344,7 +342,7 @@ int main(int arcg, char* argv[])
 			}
 			
 			playerposition = { player.x, player.y-20, 100, 120 };
-			player.movementbox = { player.x+25, player.y+110, 50, 10 };
+			player.movementbox = { player.x+30, player.y+110, 50, 10 };
 			
 		}
 
@@ -373,7 +371,7 @@ int main(int arcg, char* argv[])
 			DrawBackground(render, bck, rectbckcondition);
 			SDL_SetRenderDrawColor(render, 170, 0, 0, 255);
 			
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 			{
 				DrawPlatforms(render, platformtexture, platformcondition, platforms[i].platformposition);
 
@@ -399,7 +397,7 @@ int main(int arcg, char* argv[])
 		}
 
 		SDL_RenderPresent(render);
-		SDL_Delay(30);
+		SDL_Delay(25);
 	#pragma endregion 
 	
 	}

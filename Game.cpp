@@ -14,7 +14,7 @@ struct Player
 
 struct Platform
 {
-	int x, y, w, h;
+	SDL_Rect platformposition = { 0, 0, 110, 30 };
 	int type;
 };
 
@@ -97,25 +97,25 @@ void GeneratePlatforms(Platform platforms[])
 
 	for (int i = 0; i < 10; i++)
 	{
-		platforms[i].x = random(5, 510);
-		platforms[i].y = random(-100, 750);
+		platforms[i].platformposition.x = random(5, 510);
+		platforms[i].platformposition.y = random(-100, 750);
 
-		if (((platforms[i].x + w) >= term_x) && ((term_x + w) <= platforms[i].x))
+		if (((platforms[i].platformposition.x + w) >= term_x) && ((term_x + w) <= platforms[i].platformposition.x))
 		{
-			platforms[i].x += w;
+			platforms[i].platformposition.x += w;
 		}
 
-		if (((platforms[i].y + h) >= term_y) && ((term_y + h) <= platforms[i].y))
+		if (((platforms[i].platformposition.y + h) >= term_y) && ((term_y + h) <= platforms[i].platformposition.y))
 		{
-			platforms[i].y += h;
+			platforms[i].platformposition.y += h;
 		}
 
-		platforms[i].w = w;
-		platforms[i].h = h;
+		platforms[i].platformposition.w = w;
+		platforms[i].platformposition.h = h;
 		platforms[i].type = 0;
 		
-		term_x = platforms[i].x;
-		term_y = platforms[i].y;
+		term_x = platforms[i].platformposition.x;
+		term_y = platforms[i].platformposition.y;
 	}
 }
 

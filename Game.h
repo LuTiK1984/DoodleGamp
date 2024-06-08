@@ -11,7 +11,7 @@ struct Player
 
 struct Platform
 {
-	int x, y, w, h;
+	SDL_Rect platformposition = { 0, 0, 110, 30 };
 	int type;
 };
 

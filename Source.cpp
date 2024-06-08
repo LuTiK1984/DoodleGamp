@@ -6,8 +6,8 @@
 #include <Game.h>
 
 #pragma region GLOBALINIT
-#define PLAYER_JUMP_SPEED 40
-#define FIXED_Y 750
+#define PLAYER_JUMP_SPEED 100
+#define FIXED_Y 850
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -97,42 +97,6 @@ void Init()
 
 }
 
-void PlayerMovement(int i)
-{
-	if (((player.x + player.w) >= platforms[i].x) && ((platforms[i].x + platforms[i].w) >= player.x) && ((player.y + player.h) < platforms[i].y) && ((player.y + player.h - player.a) >= platforms[i].y))
-	{
-		if (((player.y + player.h) < platforms[i].y) && ((player.y + player.h - player.a) > platforms[i].y)) player.a = PLAYER_JUMP_SPEED;
-		else player.a -= 2;
-	}
-
-	
-	else if ((player.y + player.h - player.a) < FIXED_Y) player.a -= 2;
-	
-	else player.a = PLAYER_JUMP_SPEED;
-	
-	
-	player.y -= player.a;
-	
-	
-
-
-	if (player.x > (win_width + 50)) player.x = -100;
-	if (player.x < -100) player.x = win_width + 50;
-
-	if (isRightPressed && !isLeftPressed)
-	{
-		player.x += 10;
-		player.isFlip = true;
-	}
-	if (!isRightPressed && isLeftPressed)
-	{
-		player.x -= 10;
-		player.isFlip = false;
-	}
-}
-
-
-
 int main(int arcg, char* argv[])
 {
 	srand(time(NULL));
@@ -215,7 +179,6 @@ int main(int arcg, char* argv[])
 	GeneratePlatforms(platforms);
 
 	SDL_Rect platformcondition = { 315, 895, 115, 30 };
-	SDL_Rect platformposition = { 0, 0, 110, 30 };
 
 #pragma endregion
 
@@ -340,7 +303,7 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
-			if ((player.a >= PLAYER_JUMP_SPEED - 4) || (player.a <= (PLAYER_JUMP_SPEED - 4) * -1))
+			if ((player.a >= PLAYER_JUMP_SPEED) || (player.a <= (PLAYER_JUMP_SPEED) * -1))
 			{
 				player.isJump = true;
 			}
@@ -355,7 +318,42 @@ int main(int arcg, char* argv[])
 			
 			playerposition = { player.x, player.y, 100, 120 };
 			
-			for(int i = 0; i < 10; i++) PlayerMovement(i);
+			for (int i = 0; i < 10; i++)
+			{
+				if (SDL_HasIntersection(&platforms[i].platformposition, &playerposition))
+				{
+					if (((player.y + player.h) < platforms[i].platformposition.y) && ((player.y + player.h - player.a) > platforms[i].platformposition.y))
+					{
+						player.a = PLAYER_JUMP_SPEED;
+						break;
+
+					}
+					else player.a -= 1;
+				}
+				else
+				{
+					if ((player.y + player.h - player.a) < FIXED_Y) player.a -= 1;
+
+					else player.a = PLAYER_JUMP_SPEED;
+
+
+				}
+			}
+					player.y -= player.a;
+				
+				if (player.x > (win_width + 50)) player.x = -100;
+				if (player.x < -100) player.x = win_width + 50;
+
+				if (isRightPressed && !isLeftPressed)
+				{
+					player.x += 10;
+					player.isFlip = true;
+				}
+				if (!isRightPressed && isLeftPressed)
+				{
+					player.x -= 10;
+					player.isFlip = false;
+				}
 			
 			
 		}
@@ -386,9 +384,7 @@ int main(int arcg, char* argv[])
 			SDL_SetRenderDrawColor(render, 170, 0, 0, 255);
 			for (int i = 0; i < 10; i++)
 			{
-				platformposition.x = platforms[i].x;
-				platformposition.y = platforms[i].y;
-				DrawPlatforms(render, platformtexture, platformcondition, platformposition);
+				DrawPlatforms(render, platformtexture, platformcondition, platforms[i].platformposition);
 
 			}
 			SDL_RenderFillRect(render, &islam);
@@ -413,8 +409,7 @@ int main(int arcg, char* argv[])
 		}
 
 		SDL_RenderPresent(render);
-
-		SDL_Delay(25);
+		SDL_Delay(40);
 	#pragma endregion 
 	
 	}

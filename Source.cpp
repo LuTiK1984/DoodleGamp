@@ -342,7 +342,7 @@ int main(int arcg, char* argv[])
 			}
 			
 			playerposition = { player.x, player.y-20, 100, 120 };
-			player.movementbox = { player.x+30, player.y+110, 50, 10 };
+			player.movementbox = { player.x+25, player.y+110, 50, 10 };
 			
 		}
 

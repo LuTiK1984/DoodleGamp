@@ -6,7 +6,7 @@
 #include <Game.h>
 
 #pragma region GLOBALINIT
-#define PLAYER_JUMP_SPEED 35
+#define PLAYER_JUMP_SPEED 40
 #define FIXED_Y 850
 
 SDL_Window* win = NULL;

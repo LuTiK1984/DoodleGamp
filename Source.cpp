@@ -2,8 +2,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
-#include <Menu.h>
-#include <Game.h>
+#include "Menu.h"
+#include "Game.h"
 
 #pragma region GLOBALINIT
 #define PLAYER_JUMP_SPEED 40
@@ -345,12 +345,12 @@ int main(int arcg, char* argv[])
 
 			if (isRightPressed && !isLeftPressed)
 			{
-				player.x += 10;
+				player.x += 12;
 				player.isFlip = true;
 			}
 			if (!isRightPressed && isLeftPressed)
 			{
-				player.x -= 10;
+				player.x -= 12;
 				player.isFlip = false;
 			}
 			

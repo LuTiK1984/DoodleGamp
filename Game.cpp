@@ -7,7 +7,7 @@
 struct Player
 {
 	int x, y, w, h;
-	SDL_Rect movementbox = { x,y,55,10 };
+	SDL_Rect movementbox = { x,y,50,10 };
 	int a;
 	bool isJump;
 	bool isFlip;
@@ -116,7 +116,7 @@ void GeneratePlatforms(Platform platforms[], int num)
 		{
 
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-100, 750);
+			platforms[i].platformposition.y = random(-50, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -156,7 +156,7 @@ void DestroyPlatforms(SDL_Texture* platform)
 void RegeneratePlatform(Platform platforms[],int num)
 {
 	platforms[num].platformposition.x = random(5, 510);
-	platforms[num].platformposition.y = random(-50, 0);
+	platforms[num].platformposition.y = random(-100, 30);
 	platforms[num].platformposition.w = 110;
 	platforms[num].platformposition.h = 30;
 

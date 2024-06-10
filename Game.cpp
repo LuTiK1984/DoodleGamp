@@ -152,3 +152,37 @@ void DestroyPlatforms(SDL_Texture* platform)
 {
 	SDL_DestroyTexture(platform);
 }
+
+void RegeneratePlatform(Platform platforms[],int num)
+{
+	platforms[num].platformposition.x = random(5, 510);
+	platforms[num].platformposition.y = random(-50, 0);
+	platforms[num].platformposition.w = 110;
+	platforms[num].platformposition.h = 30;
+
+	SDL_Rect term =
+	{
+		platforms[num].platformposition.x,
+		platforms[num].platformposition.y,
+		platforms[num].platformposition.w,
+		platforms[num].platformposition.h
+	};
+
+	for (int i = 0; i < num; i++)
+	{
+		if (SDL_HasIntersection(&platforms[i].platformposition, &term))
+		{
+			platforms[i].platformposition.x += random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+			platforms[i].platformposition.y -= random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+			break;
+		}
+	}
+}
+
+void UpdatePlatforms(Platform platforms[], int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		if (platforms[i].platformposition.y > 950 + 30) RegeneratePlatform(platforms, i);
+	}
+}

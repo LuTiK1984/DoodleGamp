@@ -7,7 +7,7 @@
 
 #pragma region GLOBALINIT
 #define PLAYER_JUMP_SPEED 40
-#define FIXED_Y 850
+#define FIXED_Y 750
 #define NUM_OF_PLATFORMS 15
 
 SDL_Window* win = NULL;
@@ -302,6 +302,7 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
+
 			if (player.isJump) 
 			{ 
 				playercondition = { 125, 0, 100, 120 }; 
@@ -309,6 +310,7 @@ int main(int arcg, char* argv[])
 			}
 			else playercondition = { 0, 0, 100, 120 };
 			
+			int term = 0;
 			
 			for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 			{
@@ -316,7 +318,18 @@ int main(int arcg, char* argv[])
 				{
 					player.isJump = true;
 					player.a = PLAYER_JUMP_SPEED;
-					player.y = platforms[i].platformposition.y - player.h;
+					if (platforms[i].platformposition.y < FIXED_Y)
+					{
+						term = FIXED_Y - platforms[i].platformposition.y;
+						player.score += term;
+						
+						for (int j = 0; j < NUM_OF_PLATFORMS; j++)
+						{
+							platforms[j].platformposition.y += term;
+							UpdatePlatforms(platforms, NUM_OF_PLATFORMS);
+						}
+					}
+					player.y = platforms[i].platformposition.y-110;
 					break;
 				}
 				else player.isJump = false;
@@ -341,8 +354,23 @@ int main(int arcg, char* argv[])
 				player.isFlip = false;
 			}
 			
-			playerposition = { player.x, player.y-20, 100, 120 };
-			player.movementbox = { player.x+25, player.y+110, 50, 10 };
+
+			playerposition = { player.x, player.y, 100, 120 };
+			player.movementbox = { player.x+25, player.y + 120, 50, 10 };
+
+
+			if (player.movementbox.y > win_height + player.h)
+			{
+				system("cls");
+				player.x = (win_width / 2) - 50;
+				player.y = FIXED_Y;
+				playerposition = { player.x, player.y, 100, 120 };
+				GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
+				player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
+				printf("\nРекорд: %i\n", player.score);
+				player.score = 0;
+				isGame = false;
+			}
 			
 		}
 

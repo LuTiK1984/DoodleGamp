@@ -37,3 +37,7 @@ void GeneratePlatforms(Platform platforms[], int num);
 void DrawPlatforms(SDL_Renderer* render, SDL_Texture* platformtexture, SDL_Rect platformcondition, SDL_Rect platformposition);
 
 void DestroyPlatforms(SDL_Texture* platform);
+
+void RegeneratePlatform(Platform platforms[], int num);
+
+void UpdatePlatforms(Platform platforms[], int num);

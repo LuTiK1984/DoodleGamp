@@ -371,7 +371,8 @@ void UpdateEnemy(Enemy enemies[], int num)
 
 void EnemiesMove(Enemy enemies[], int num, SDL_Rect *enemycondition)
 {
-	int x = 5;
+	int x = 6;
+	int y = 3;
 	for (int i = 0; i < num; i++)
 	{
 		if (enemies[i].movetick >= x)
@@ -379,19 +380,20 @@ void EnemiesMove(Enemy enemies[], int num, SDL_Rect *enemycondition)
 			enemies[i].movetick = 0;
 			enemies[i].v *= -1;
 		}
-		if (enemies[i].animationtick == 2)
+		if (enemies[i].animationtick > y)
 		{
-			*enemycondition = { 675,465,150, 85 };
-			enemies[i].animationtick--;
+			*enemycondition = { 675,467,150, 85 };
+			enemies[i].animationtick = -y;
 		}
-		if (enemies[i].animationtick == 1)
+		if (enemies[i].animationtick == 0)
 		{
 			*enemycondition = { 675,380,150, 85 };
-			enemies[i].animationtick++;
 		}
 
 		enemies[i].position.x += enemies[i].v;
+		enemies[i].position.y -= enemies[i].v;
 		enemies[i].movetick++;
+		enemies[i].animationtick++;
 
 	}
 }

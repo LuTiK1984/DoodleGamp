@@ -326,19 +326,7 @@ int main(int arcg, char* argv[])
 			}
 			else playercondition = { 0, 0, 100, 120 };
 
-			for (int i = 0; i < NUM_OF_ENEMY; i++)
-			{
-				if (enemies[i].animationtick == 2)
-				{
-					enemycondition = { 675,465,150, 85 };
-					enemies[i].animationtick--;
-				}
-				if (enemies[i].animationtick == 1)
-				{
-					enemycondition = { 675,380,150, 85 };
-					enemies[i].animationtick++;
-				}
-			}
+			
 			
 			int term = 0;
 			

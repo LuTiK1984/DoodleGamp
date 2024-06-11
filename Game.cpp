@@ -2,8 +2,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
-#define NUM_OF_PLATFORMS 15
-
+#define NUM_OF_PLATFORMS 10
+#define NUM_OF_FLOATING_PLATFORMS 5
 struct Player
 {
 	int x, y, w, h;
@@ -93,7 +93,6 @@ void CreatePlatforms(SDL_Renderer* render, SDL_Surface* &platformsurf, SDL_Textu
 
 void GeneratePlatforms(Platform platforms[], int num)
 {
-;
 	SDL_Rect term[NUM_OF_PLATFORMS];
 	for (int i = 0; i < num; i++)
 	{
@@ -184,5 +183,52 @@ void UpdatePlatforms(Platform platforms[], int num)
 	for (int i = 0; i < num; i++)
 	{
 		if (platforms[i].platformposition.y > 950 + 30) RegeneratePlatform(platforms, i);
+	}
+}
+
+void CreateFloatPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_Texture*& platformtexture)
+{
+	platformsurf = IMG_Load("sprites/atlas.png");
+	platformtexture = SDL_CreateTextureFromSurface(render, platformsurf);
+
+	if (platformsurf == NULL)
+	{
+		printf("Couldn`t load platforms! Error: %s", SDL_GetError());
+		system("pause");
+		exit(1);
+	}
+
+	SDL_FreeSurface(platformsurf);
+}
+
+void GenerateFloatPlatforms(Platform platforms[], int num)
+{
+	SDL_Rect term[NUM_OF_FLOATING_PLATFORMS];
+	for (int i = 0; i < num; i++)
+	{
+			platforms[i].platformposition.x = random(5, 510);
+			platforms[i].platformposition.y = random(-50, 750);
+			platforms[i].platformposition.w = 110;
+			platforms[i].platformposition.h = 30;
+
+			term[i].x = platforms[i].platformposition.x;
+			term[i].y = platforms[i].platformposition.y;
+			term[i].w = platforms[i].platformposition.w;
+			term[i].h = platforms[i].platformposition.h;
+
+			platforms[i].type = 1;
+	}
+
+	for (int i = 0; i < num; i++)
+	{
+		for (int j = i + 1; j < num; j++)
+		{
+			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
+			{
+				platforms[i].platformposition.x += random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+				break;
+			}
+		}
 	}
 }

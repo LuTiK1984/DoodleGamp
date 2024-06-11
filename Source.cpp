@@ -8,13 +8,17 @@
 #pragma region GLOBALINIT
 #define PLAYER_JUMP_SPEED 40
 #define FIXED_Y 750
-#define NUM_OF_PLATFORMS 15
+#define NUM_OF_PLATFORMS 10
+#define NUM_OF_FLOATING_PLATFORMS 5
+#define FLOATPLATFORM_FIXED_X 5
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
 
 Player player;
+
 Platform platforms[NUM_OF_PLATFORMS];
+Platform floatplatforms[NUM_OF_FLOATING_PLATFORMS];
 
 
 int win_width = 630, win_height = 950;
@@ -22,12 +26,10 @@ int win_width = 630, win_height = 950;
 int mouse_x = 0;
 int mouse_y = 0;
 
-int winspeed = 0;
-
 int mouseclick_x = 0;
 int mouseclick_y = 0;
 
-int x, y;
+
 
 int Volume = 128;
 
@@ -174,10 +176,16 @@ int main(int arcg, char* argv[])
 
 	CreatePlatforms(render, platformsurf, platformtexture);
 
-
 	GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
-
+	
 	SDL_Rect platformcondition = { 315, 895, 115, 30 };
+	
+	SDL_Surface* floatplatformsurf;
+	SDL_Texture* floatplatformtexture;
+
+	CreateFloatPlatforms(render, floatplatformsurf, floatplatformtexture);
+	GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+	SDL_Rect floatplatformcondition = { 315, 925, 115, 30 };
 
 #pragma endregion
 
@@ -258,16 +266,16 @@ int main(int arcg, char* argv[])
 				case SDL_SCANCODE_ESCAPE: //Клавиша ESC
 					isRunning = false;
 					break;
-				case SDL_SCANCODE_E: //Клавиша стрелка вверх
+				case SDL_SCANCODE_E: 
 					isEPressed = true;
 					break;
-				case SDL_SCANCODE_A: //Клавиша стрелка влево
+				case SDL_SCANCODE_A: 
 					isLeftPressed = true;
 					break;
-				case SDL_SCANCODE_Q: //Клавиша стрелка вниз
+				case SDL_SCANCODE_Q: 
 					isQPressed = true;
 					break;
-				case SDL_SCANCODE_D: //Клавиша стрелка вправо
+				case SDL_SCANCODE_D: 
 					isRightPressed = true;
 					break;
 				}
@@ -276,16 +284,16 @@ int main(int arcg, char* argv[])
 			case SDL_KEYUP: //Обработка отпускания клавиш клавиатуры
 				switch (ev.key.keysym.scancode)
 				{
-				case SDL_SCANCODE_E: //Клавиша стрелка вверх
+				case SDL_SCANCODE_E: 
 					isEPressed = false;
 					break;
-				case SDL_SCANCODE_A: //Клавиша стрелка влево
+				case SDL_SCANCODE_A: 
 					isLeftPressed = false;
 					break;
-				case SDL_SCANCODE_Q: //Клавиша стрелка вниз
+				case SDL_SCANCODE_Q: 
 					isQPressed = false;
 					break;
-				case SDL_SCANCODE_D: //Клавиша стрелка вправо
+				case SDL_SCANCODE_D:
 					isRightPressed = false;
 					break;
 				}
@@ -320,20 +328,56 @@ int main(int arcg, char* argv[])
 					player.a = PLAYER_JUMP_SPEED;
 					if (platforms[i].platformposition.y < FIXED_Y)
 					{
-						term = FIXED_Y - platforms[i].platformposition.y;
+						term = FIXED_Y - platforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
 						player.score += term;
 						
 						for (int j = 0; j < NUM_OF_PLATFORMS; j++)
 						{
+							
 							platforms[j].platformposition.y += term;
 							UpdatePlatforms(platforms, NUM_OF_PLATFORMS);
+							
+							if (j < NUM_OF_FLOATING_PLATFORMS)
+							{
+								floatplatforms[j].platformposition.y += term;
+								UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+							}
 						}
 					}
 					player.y = platforms[i].platformposition.y-110;
 					break;
 				}
+				else player.isJump = false;	
+			}
+
+			for (int i = 0; i < NUM_OF_FLOATING_PLATFORMS; i++)
+			{
+				if (SDL_HasIntersection(&floatplatforms[i].platformposition, &player.movementbox))
+				{
+					player.isJump = true;
+					player.a = PLAYER_JUMP_SPEED;
+					if (floatplatforms[i].platformposition.y < FIXED_Y)
+					{
+						term = FIXED_Y - floatplatforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
+						player.score += term;
+
+						for (int j = 0; j < NUM_OF_PLATFORMS; j++)
+						{
+
+							platforms[j].platformposition.y += term;
+							UpdatePlatforms(platforms, NUM_OF_PLATFORMS);
+							
+							if (j < NUM_OF_FLOATING_PLATFORMS)
+							{
+								floatplatforms[j].platformposition.y += term;
+								UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+							}
+						}
+					}
+					player.y = floatplatforms[i].platformposition.y - 110;
+					break;
+				}
 				else player.isJump = false;
-				
 			}
 			
 			player.a -= 2;	
@@ -366,6 +410,7 @@ int main(int arcg, char* argv[])
 				player.y = FIXED_Y;
 				playerposition = { player.x, player.y, 100, 120 };
 				GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
+				GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
 				player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
 				printf("\nРекорд: %i\n", player.score);
 				player.score = 0;
@@ -402,7 +447,7 @@ int main(int arcg, char* argv[])
 			for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 			{
 				DrawPlatforms(render, platformtexture, platformcondition, platforms[i].platformposition);
-
+				if(i<NUM_OF_FLOATING_PLATFORMS) DrawPlatforms(render, floatplatformtexture, floatplatformcondition, floatplatforms[i].platformposition);
 			}
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
 
@@ -439,6 +484,7 @@ int main(int arcg, char* argv[])
 	MainMenuDestroy(menu, plbutton, sttngsbutton);
 	DestroyBackground(bck);
 	DestroyPlatforms(platformtexture);
+	DestroyPlatforms(floatplatformtexture);
 	DestroyPlayer(playertexture);
 	Mix_CloseAudio();
 	

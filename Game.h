@@ -41,3 +41,7 @@ void DestroyPlatforms(SDL_Texture* platform);
 void RegeneratePlatform(Platform platforms[], int num);
 
 void UpdatePlatforms(Platform platforms[], int num);
+
+void CreateFloatPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_Texture*& platformtexture);
+
+void GenerateFloatPlatforms(Platform platforms[], int num);

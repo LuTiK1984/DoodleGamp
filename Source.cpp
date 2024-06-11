@@ -11,7 +11,7 @@
 #define NUM_OF_PLATFORMS 10
 #define NUM_OF_FLOATING_PLATFORMS 5
 #define FLOATPLATFORM_FIXED_X 100
-#define NUM_OF_ENEMY 3
+#define NUM_OF_ENEMY 1
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -192,8 +192,8 @@ int main(int arcg, char* argv[])
 	SDL_Surface* enemysurf;
 	SDL_Texture* enemytexture;
 	CreateEnemy(render, enemysurf,enemytexture);
-	SDL_Rect enemycondition = {675,380,150, 85};
-	GenerateEnemies(enemies,NUM_OF_ENEMY);
+	SDL_Rect enemycondition = {675,380, 150, 85};
+	GenerateEnemies(enemies,NUM_OF_ENEMY, &enemycondition);
 
 #pragma endregion
 
@@ -325,6 +325,20 @@ int main(int arcg, char* argv[])
 				Mix_PlayChannel(1, jumpsfx, 0);
 			}
 			else playercondition = { 0, 0, 100, 120 };
+
+			for (int i = 0; i < NUM_OF_ENEMY; i++)
+			{
+				if (enemies[i].animationtick == 2)
+				{
+					enemycondition = { 675,465,150, 85 };
+					enemies[i].animationtick--;
+				}
+				if (enemies[i].animationtick == 1)
+				{
+					enemycondition = { 675,380,150, 85 };
+					enemies[i].animationtick++;
+				}
+			}
 			
 			int term = 0;
 			
@@ -349,6 +363,11 @@ int main(int arcg, char* argv[])
 							{
 								floatplatforms[j].platformposition.y += term;
 								UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+							}
+							if (j < NUM_OF_ENEMY)
+							{
+								enemies[j].position.y += term;
+								UpdateEnemy(enemies, NUM_OF_ENEMY);
 							}
 						}
 					}
@@ -380,6 +399,11 @@ int main(int arcg, char* argv[])
 								floatplatforms[j].platformposition.y += term;
 								UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
 							}
+							if (j < NUM_OF_ENEMY)
+							{
+								enemies[j].position.y += term;
+								UpdateEnemy(enemies, NUM_OF_ENEMY);
+							}
 						}
 					}
 					player.y = floatplatforms[i].platformposition.y - 110;
@@ -407,6 +431,7 @@ int main(int arcg, char* argv[])
 			
 
 			FloatPlatformsMove(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
+			EnemiesMove(enemies, NUM_OF_ENEMY, &enemycondition);
 
 			playerposition = { player.x, player.y, 100, 120 };
 			player.movementbox = { player.x+25, player.y + 120, 50, 10 };
@@ -421,7 +446,7 @@ int main(int arcg, char* argv[])
 					playerposition = { player.x, player.y, 100, 120 };
 					GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
 					GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
-					GenerateEnemies(enemies, NUM_OF_ENEMY);
+					GenerateEnemies(enemies, NUM_OF_ENEMY, &enemycondition);
 					player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
 					printf("\nРекорд: %i\n", player.score);
 					player.score = 0;

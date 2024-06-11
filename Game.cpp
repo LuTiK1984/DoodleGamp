@@ -4,7 +4,7 @@
 #include <SDL_mixer.h>
 #define NUM_OF_PLATFORMS 10
 #define NUM_OF_FLOATING_PLATFORMS 5
-#define NUM_OF_ENEMY 3
+#define NUM_OF_ENEMY 1
 
 
 
@@ -169,7 +169,7 @@ void DestroyPlatforms(SDL_Texture* platform)
 void RegeneratePlatform(Platform platforms[],int num)
 {
 	platforms[num].platformposition.x = random(5, 510);
-	platforms[num].platformposition.y = random(-100, 30);
+	platforms[num].platformposition.y = random(-500, 30);
 	platforms[num].platformposition.w = 110;
 	platforms[num].platformposition.h = 30;
 
@@ -221,7 +221,7 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 	for (int i = 0; i < num; i++)
 	{
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-50, 750);
+			platforms[i].platformposition.y = random(-200, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -290,13 +290,13 @@ void DestroyEnemy(SDL_Texture* enemy)
 	SDL_DestroyTexture(enemy);
 }
 
-void GenerateEnemies(Enemy enemies[], int num)
+void GenerateEnemies(Enemy enemies[], int num, SDL_Rect *enemycondition)
 {
 	SDL_Rect term[NUM_OF_FLOATING_PLATFORMS];
 	for (int i = 0; i < num; i++)
 	{
 		enemies[i].position.x = random(5, 510);
-		enemies[i].position.y = random(-50, 750);
+		enemies[i].position.y = random(-1000, -100);
 		enemies[i].position.w = 150;
 		enemies[i].position.h = 85;
 
@@ -305,9 +305,20 @@ void GenerateEnemies(Enemy enemies[], int num)
 		term[i].w = enemies[i].position.w;
 		term[i].h = enemies[i].position.h;
 
-		enemies[i].animationtick = random(0, 1);
+		enemies[i].animationtick = random(1, 2);
 		enemies[i].movetick = random(0, 2);
 		enemies[i].v = random(1, 4);
+
+		if (enemies[i].animationtick == 2)
+		{
+			*enemycondition = { 675,465,150, 85 };
+			enemies[i].animationtick--;
+		}
+		if (enemies[i].animationtick == 1)
+		{
+			*enemycondition = { 675,380,150, 85 };
+			enemies[i].animationtick++;
+		}
 	}
 
 	for (int i = 0; i < num; i++)
@@ -321,5 +332,66 @@ void GenerateEnemies(Enemy enemies[], int num)
 				break;
 			}
 		}
+	}
+}
+
+void RegenerateEnemy(Enemy enemies[], int num)
+{
+	enemies[num].position.x = random(5, 510);
+	enemies[num].position.y = random(-1000, 30);
+	enemies[num].position.w = 150;
+	enemies[num].position.h = 85;
+
+	SDL_Rect term =
+	{
+		enemies[num].position.x,
+		enemies[num].position.y,
+		enemies[num].position.w,
+		enemies[num].position.h
+	};
+
+	for (int i = 0; i < num; i++)
+	{
+		if (SDL_HasIntersection(&enemies[num].position, &term))
+		{
+			enemies[i].position.x += random(-10, 100) * random(-enemies[i].position.w * enemies[i].position.w, enemies[i].position.w * enemies[i].position.w);
+			enemies[i].position.y -= random(-10, 100) * random(-enemies[i].position.h * enemies[i].position.h, enemies[i].position.h * enemies[i].position.h);
+			break;
+		}
+	}
+}
+
+void UpdateEnemy(Enemy enemies[], int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		if (enemies[i].position.y > 950 + 30) RegenerateEnemy(enemies, i);
+	}
+}
+
+void EnemiesMove(Enemy enemies[], int num, SDL_Rect *enemycondition)
+{
+	int x = 5;
+	for (int i = 0; i < num; i++)
+	{
+		if (enemies[i].movetick >= x)
+		{
+			enemies[i].movetick = 0;
+			enemies[i].v *= -1;
+		}
+		if (enemies[i].animationtick == 2)
+		{
+			*enemycondition = { 675,465,150, 85 };
+			enemies[i].animationtick--;
+		}
+		if (enemies[i].animationtick == 1)
+		{
+			*enemycondition = { 675,380,150, 85 };
+			enemies[i].animationtick++;
+		}
+
+		enemies[i].position.x += enemies[i].v;
+		enemies[i].movetick++;
+
 	}
 }

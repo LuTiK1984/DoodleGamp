@@ -64,4 +64,10 @@ void DrawEnemy(SDL_Renderer* render, SDL_Texture* enemytexture, SDL_Rect enemyco
 
 void DestroyEnemy(SDL_Texture* enemy);
 
-void GenerateEnemies(Enemy enemies[], int num);
+void GenerateEnemies(Enemy enemies[], int num, SDL_Rect *enemycondition);
+
+void RegenerateEnemy(Enemy enemies[], int num);
+
+void UpdateEnemy(Enemy enemies[], int num);
+
+void EnemiesMove(Enemy enemies[], int num, SDL_Rect *enemycondition);

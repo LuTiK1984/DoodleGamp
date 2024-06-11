@@ -320,7 +320,6 @@ int main(int arcg, char* argv[])
 			
 			int term = 0;
 			
-
 			for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 			{
 				if (SDL_HasIntersection(&platforms[i].platformposition, &player.movementbox))
@@ -378,7 +377,6 @@ int main(int arcg, char* argv[])
 					player.y = floatplatforms[i].platformposition.y - 110;
 					break;
 				}
-				else player.isJump = false;
 			}
 			
 			player.a -= 2;	

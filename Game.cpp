@@ -220,7 +220,7 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 
 			platforms[i].type = 1;
 			platforms[i].movetick = random(0,x);
-			platforms[i].v = random(1, 3);
+			platforms[i].v = random(2, 4);
 	}
 
 	for (int i = 0; i < num; i++)

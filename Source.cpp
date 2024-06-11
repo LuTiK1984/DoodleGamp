@@ -10,7 +10,7 @@
 #define FIXED_Y 750
 #define NUM_OF_PLATFORMS 10
 #define NUM_OF_FLOATING_PLATFORMS 5
-#define FLOATPLATFORM_FIXED_X 5
+#define FLOATPLATFORM_FIXED_X 100
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -184,7 +184,7 @@ int main(int arcg, char* argv[])
 	SDL_Texture* floatplatformtexture;
 
 	CreateFloatPlatforms(render, floatplatformsurf, floatplatformtexture);
-	GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+	GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
 	SDL_Rect floatplatformcondition = { 315, 925, 115, 30 };
 
 #pragma endregion
@@ -320,6 +320,7 @@ int main(int arcg, char* argv[])
 			
 			int term = 0;
 			
+
 			for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 			{
 				if (SDL_HasIntersection(&platforms[i].platformposition, &player.movementbox))
@@ -399,6 +400,8 @@ int main(int arcg, char* argv[])
 			}
 			
 
+			FloatPlatformsMove(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
+
 			playerposition = { player.x, player.y, 100, 120 };
 			player.movementbox = { player.x+25, player.y + 120, 50, 10 };
 
@@ -410,7 +413,7 @@ int main(int arcg, char* argv[])
 				player.y = FIXED_Y;
 				playerposition = { player.x, player.y, 100, 120 };
 				GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
-				GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+				GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
 				player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
 				printf("\nРекорд: %i\n", player.score);
 				player.score = 0;

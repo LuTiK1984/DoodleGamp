@@ -18,6 +18,8 @@ struct Platform
 {
 	SDL_Rect platformposition = { 0, 0, 110, 30 };
 	int type;
+	int movetick;
+	int v;
 };
 
 void CreatePlayer(SDL_Renderer* render, SDL_Surface* &playersurf, SDL_Texture* &playertexture)
@@ -201,7 +203,7 @@ void CreateFloatPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_
 	SDL_FreeSurface(platformsurf);
 }
 
-void GenerateFloatPlatforms(Platform platforms[], int num)
+void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 {
 	SDL_Rect term[NUM_OF_FLOATING_PLATFORMS];
 	for (int i = 0; i < num; i++)
@@ -217,6 +219,8 @@ void GenerateFloatPlatforms(Platform platforms[], int num)
 			term[i].h = platforms[i].platformposition.h;
 
 			platforms[i].type = 1;
+			platforms[i].movetick = random(0,x);
+			platforms[i].v = random(1, 3);
 	}
 
 	for (int i = 0; i < num; i++)
@@ -230,5 +234,21 @@ void GenerateFloatPlatforms(Platform platforms[], int num)
 				break;
 			}
 		}
+	}
+}
+
+void FloatPlatformsMove(Platform platforms[], int num, int x)
+{
+	for (int i = 0; i < num; i++)
+	{
+		if (platforms[i].movetick >= x)
+		{
+			platforms[i].movetick = 0;
+			platforms[i].v *= -1;
+		}
+		
+			platforms[i].platformposition.x += platforms[i].v;
+			platforms[i].movetick ++;
+		
 	}
 }

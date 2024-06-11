@@ -14,6 +14,8 @@ struct Platform
 {
 	SDL_Rect platformposition = { 0, 0, 110, 30 };
 	int type;
+	int movetick;
+	int v;
 };
 
 void CreatePlayer(SDL_Renderer* render, SDL_Surface*& playersurf, SDL_Texture*& playertexture);
@@ -44,4 +46,6 @@ void UpdatePlatforms(Platform platforms[], int num);
 
 void CreateFloatPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_Texture*& platformtexture);
 
-void GenerateFloatPlatforms(Platform platforms[], int num);
+void GenerateFloatPlatforms(Platform platforms[], int num, int x);
+
+void FloatPlatformsMove(Platform platforms[], int num, int x);

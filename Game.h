@@ -18,6 +18,14 @@ struct Platform
 	int v;
 };
 
+struct Enemy
+{
+	SDL_Rect position;
+	int animationtick;
+	int movetick;
+	int v;
+};
+
 void CreatePlayer(SDL_Renderer* render, SDL_Surface*& playersurf, SDL_Texture*& playertexture);
 
 void DrawPlayer(SDL_Renderer* render, SDL_Texture*& playertexture, SDL_Rect& playercondition, SDL_Rect& playerposition, Player player);
@@ -49,3 +57,11 @@ void CreateFloatPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_
 void GenerateFloatPlatforms(Platform platforms[], int num, int x);
 
 void FloatPlatformsMove(Platform platforms[], int num, int x);
+
+void CreateEnemy(SDL_Renderer* render, SDL_Surface*& playersurf, SDL_Texture*& playertexture);
+
+void DrawEnemy(SDL_Renderer* render, SDL_Texture* enemytexture, SDL_Rect enemycondition, SDL_Rect enemyposition);
+
+void DestroyEnemy(SDL_Texture* enemy);
+
+void GenerateEnemies(Enemy enemies[], int num);

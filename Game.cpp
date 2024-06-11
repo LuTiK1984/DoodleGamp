@@ -4,6 +4,10 @@
 #include <SDL_mixer.h>
 #define NUM_OF_PLATFORMS 10
 #define NUM_OF_FLOATING_PLATFORMS 5
+#define NUM_OF_ENEMY 3
+
+
+
 struct Player
 {
 	int x, y, w, h;
@@ -18,6 +22,14 @@ struct Platform
 {
 	SDL_Rect platformposition = { 0, 0, 110, 30 };
 	int type;
+	int movetick;
+	int v;
+};
+
+struct Enemy
+{
+	SDL_Rect position;
+	int animationtick;
 	int movetick;
 	int v;
 };
@@ -136,8 +148,8 @@ void GeneratePlatforms(Platform platforms[], int num)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(10, 50) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(10, 50) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
+				platforms[i].platformposition.x += random(-10, 100) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
 				break;
 			}
 		}
@@ -173,8 +185,8 @@ void RegeneratePlatform(Platform platforms[],int num)
 	{
 		if (SDL_HasIntersection(&platforms[i].platformposition, &term))
 		{
-			platforms[i].platformposition.x += random(10, 50)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-			platforms[i].platformposition.y -= random(10, 50) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+			platforms[i].platformposition.x += random(-10, 100)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+			platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 			break;
 		}
 	}
@@ -229,8 +241,8 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += 20*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= 20*random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+				platforms[i].platformposition.x += random(-10, 100) *random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(-10, 100) *random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 				break;
 			}
 		}
@@ -250,5 +262,64 @@ void FloatPlatformsMove(Platform platforms[], int num, int x)
 			platforms[i].platformposition.x += platforms[i].v;
 			platforms[i].movetick ++;
 		
+	}
+}
+
+void CreateEnemy(SDL_Renderer* render, SDL_Surface*& playersurf, SDL_Texture*& playertexture)
+{
+	playersurf = IMG_Load("sprites/atlas.png");
+	playertexture = SDL_CreateTextureFromSurface(render, playersurf);
+
+	if (playersurf == NULL)
+	{
+		printf("Couldn`t load enemy! Error: %s", SDL_GetError());
+		system("pause");
+		exit(1);
+	}
+
+	SDL_FreeSurface(playersurf);
+}
+
+void DrawEnemy(SDL_Renderer* render, SDL_Texture* enemytexture, SDL_Rect enemycondition, SDL_Rect enemyposition)
+{
+	SDL_RenderCopy(render, enemytexture, &enemycondition, &enemyposition);
+}
+
+void DestroyEnemy(SDL_Texture* enemy)
+{
+	SDL_DestroyTexture(enemy);
+}
+
+void GenerateEnemies(Enemy enemies[], int num)
+{
+	SDL_Rect term[NUM_OF_FLOATING_PLATFORMS];
+	for (int i = 0; i < num; i++)
+	{
+		enemies[i].position.x = random(5, 510);
+		enemies[i].position.y = random(-50, 750);
+		enemies[i].position.w = 150;
+		enemies[i].position.h = 85;
+
+		term[i].x = enemies[i].position.x;
+		term[i].y = enemies[i].position.y;
+		term[i].w = enemies[i].position.w;
+		term[i].h = enemies[i].position.h;
+
+		enemies[i].animationtick = random(0, 1);
+		enemies[i].movetick = random(0, 2);
+		enemies[i].v = random(1, 4);
+	}
+
+	for (int i = 0; i < num; i++)
+	{
+		for (int j = i + 1; j < num; j++)
+		{
+			if (SDL_HasIntersection(&enemies[i].position, &term[j]))
+			{
+				enemies[i].position.x += random(-10, 100) * random(-enemies[i].position.w * enemies[i].position.w, enemies[i].position.w * enemies[i].position.w);
+				enemies[i].position.y -= random(-10, 100) * random(-enemies[i].position.h * enemies[i].position.h, enemies[i].position.h * enemies[i].position.h);
+				break;
+			}
+		}
 	}
 }

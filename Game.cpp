@@ -136,8 +136,8 @@ void GeneratePlatforms(Platform platforms[], int num)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
+				platforms[i].platformposition.x += random(10, 50) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(10, 50) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
 				break;
 			}
 		}
@@ -173,8 +173,8 @@ void RegeneratePlatform(Platform platforms[],int num)
 	{
 		if (SDL_HasIntersection(&platforms[i].platformposition, &term))
 		{
-			platforms[i].platformposition.x += random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-			platforms[i].platformposition.y -= random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+			platforms[i].platformposition.x += random(10, 50)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+			platforms[i].platformposition.y -= random(10, 50) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 			break;
 		}
 	}
@@ -229,8 +229,8 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+				platforms[i].platformposition.x += 20*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= 20*random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 				break;
 			}
 		}

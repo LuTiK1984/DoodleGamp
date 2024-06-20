@@ -169,7 +169,7 @@ void DestroyPlatforms(SDL_Texture* platform)
 void RegeneratePlatform(Platform platforms[],int num)
 {
 	platforms[num].platformposition.x = random(5, 510);
-	platforms[num].platformposition.y = random(-1000, 100);
+	platforms[num].platformposition.y = random(-1000, 10);
 	platforms[num].platformposition.w = 110;
 	platforms[num].platformposition.h = 30;
 

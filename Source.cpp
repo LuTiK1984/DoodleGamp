@@ -434,7 +434,9 @@ int main(int arcg, char* argv[])
 			
 			for (int i = 0; i < NUM_OF_BROKEN; i++)
 			{
-				if (SDL_HasIntersection(&brokenplatforms[i].platformposition, &player.movementbox))
+				SDL_Rect termblock = player.movementbox;
+				termblock.y -= player.a;
+				if (SDL_HasIntersection(&brokenplatforms[i].platformposition, &termblock))
 				{
 					Mix_PlayChannel(2, brokeplatform, 0);
 					RegeneratePlatform(brokenplatforms, i);

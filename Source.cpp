@@ -454,7 +454,7 @@ int main(int arcg, char* argv[])
 				SDL_Rect termblock = player.movementbox;
 				termblock.y -= player.a;
 
-				if(enemies[i].position.y < -300) Mix_PlayChannel(2, monsterapproaching, 0);
+				if(enemies[i].position.y < -300) Mix_PlayChannel(2, monsterapproaching, 1);
 
 				if (player.a <= 0 && SDL_HasIntersection(&enemies[i].position, &termblock))
 				{
@@ -547,7 +547,7 @@ int main(int arcg, char* argv[])
 					player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
 					printf("\nРекорд: %i\n", player.score);
 					player.score = 0;
-					SDL_Delay(1400);
+					SDL_Delay(1500);
 					isGame = false;
 				}
 

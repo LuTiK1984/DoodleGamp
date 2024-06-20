@@ -443,7 +443,7 @@ int main(int arcg, char* argv[])
 				termblock.y -= player.a;
 				if (SDL_HasIntersection(&brokenplatforms[i].platformposition, &termblock))
 				{
-					Mix_PlayChannel(2, brokeplatform, 0);
+					Mix_PlayChannel(4, brokeplatform, 0);
 					RegeneratePlatform(brokenplatforms, i);
 					break;
 				}
@@ -454,7 +454,7 @@ int main(int arcg, char* argv[])
 				SDL_Rect termblock = player.movementbox;
 				termblock.y -= player.a;
 
-				if(enemies[i].position.y < -300) Mix_PlayChannel(2, monsterapproaching, 2);
+				if(enemies[i].position.y < -300) Mix_PlayChannel(2, monsterapproaching, 0);
 
 				if (player.a < 0 && SDL_HasIntersection(&enemies[i].position, &termblock))
 				{
@@ -535,6 +535,7 @@ int main(int arcg, char* argv[])
 					{
 						Mix_PlayChannel(3, deathfrommonster, 0);
 					}
+					Mix_HaltChannel(2);
 					system("cls");
 					player.x = (win_width / 2) - 50;
 					player.y = FIXED_Y;

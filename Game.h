@@ -71,3 +71,7 @@ void RegenerateEnemy(Enemy enemies[], int num);
 void UpdateEnemy(Enemy enemies[], int num);
 
 void EnemiesMove(Enemy enemies[], int num, SDL_Rect *enemycondition);
+
+void CreateBrokenPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_Texture*& platformtexture);
+
+void GenerateBrokenPlatforms(Platform platforms[], int num);

@@ -5,7 +5,7 @@
 #define NUM_OF_PLATFORMS 10
 #define NUM_OF_FLOATING_PLATFORMS 5
 #define NUM_OF_ENEMY 1
-
+#define NUM_OF_BROKEN 3
 
 
 struct Player
@@ -129,7 +129,7 @@ void GeneratePlatforms(Platform platforms[], int num)
 		{
 
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-50, 750);
+			platforms[i].platformposition.y = random(-500, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -148,7 +148,7 @@ void GeneratePlatforms(Platform platforms[], int num)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-10, 100) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
+				platforms[i].platformposition.x += random(-10, 50) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
 				platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
 				break;
 			}
@@ -169,7 +169,7 @@ void DestroyPlatforms(SDL_Texture* platform)
 void RegeneratePlatform(Platform platforms[],int num)
 {
 	platforms[num].platformposition.x = random(5, 510);
-	platforms[num].platformposition.y = random(-500, 30);
+	platforms[num].platformposition.y = random(-1000, 100);
 	platforms[num].platformposition.w = 110;
 	platforms[num].platformposition.h = 30;
 
@@ -185,7 +185,7 @@ void RegeneratePlatform(Platform platforms[],int num)
 	{
 		if (SDL_HasIntersection(&platforms[i].platformposition, &term))
 		{
-			platforms[i].platformposition.x += random(-10, 100)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+			platforms[i].platformposition.x += random(-10, 50)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
 			platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 			break;
 		}
@@ -221,7 +221,7 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 	for (int i = 0; i < num; i++)
 	{
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-200, 750);
+			platforms[i].platformposition.y = random(-500, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -241,7 +241,7 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-10, 100) *random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+				platforms[i].platformposition.x += random(-10, 50) *random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
 				platforms[i].platformposition.y -= random(-10, 100) *random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 				break;
 			}
@@ -292,11 +292,11 @@ void DestroyEnemy(SDL_Texture* enemy)
 
 void GenerateEnemies(Enemy enemies[], int num, SDL_Rect *enemycondition)
 {
-	SDL_Rect term[NUM_OF_FLOATING_PLATFORMS];
+	SDL_Rect term[NUM_OF_ENEMY];
 	for (int i = 0; i < num; i++)
 	{
 		enemies[i].position.x = random(5, 510);
-		enemies[i].position.y = random(-1000, -100);
+		enemies[i].position.y = random(-2000, -600);
 		enemies[i].position.w = 150;
 		enemies[i].position.h = 85;
 
@@ -338,7 +338,7 @@ void GenerateEnemies(Enemy enemies[], int num, SDL_Rect *enemycondition)
 void RegenerateEnemy(Enemy enemies[], int num)
 {
 	enemies[num].position.x = random(5, 510);
-	enemies[num].position.y = random(-1000, 30);
+	enemies[num].position.y = random(-10000, 10);
 	enemies[num].position.w = 150;
 	enemies[num].position.h = 85;
 
@@ -395,5 +395,53 @@ void EnemiesMove(Enemy enemies[], int num, SDL_Rect *enemycondition)
 		enemies[i].movetick++;
 		enemies[i].animationtick++;
 
+	}
+}
+
+
+void CreateBrokenPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_Texture*& platformtexture)
+{
+	platformsurf = IMG_Load("sprites/atlas.png");
+	platformtexture = SDL_CreateTextureFromSurface(render, platformsurf);
+
+	if (platformsurf == NULL)
+	{
+		printf("Couldn`t load platforms! Error: %s", SDL_GetError());
+		system("pause");
+		exit(1);
+	}
+
+	SDL_FreeSurface(platformsurf);
+}
+
+void GenerateBrokenPlatforms(Platform platforms[], int num)
+{
+	SDL_Rect term[NUM_OF_BROKEN];
+	for (int i = 0; i < num; i++)
+	{
+			platforms[i].platformposition.x = random(5, 510);
+			platforms[i].platformposition.y = random(-500, 750);
+			platforms[i].platformposition.w = 110;
+			platforms[i].platformposition.h = 30;
+
+			term[i].x = platforms[i].platformposition.x;
+			term[i].y = platforms[i].platformposition.y;
+			term[i].w = platforms[i].platformposition.w;
+			term[i].h = platforms[i].platformposition.h;
+
+			platforms[i].type = 2;
+	}
+
+	for (int i = 0; i < num; i++)
+	{
+		for (int j = i + 1; j < num; j++)
+		{
+			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
+			{
+				platforms[i].platformposition.x += random(-10, 50) * random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+				break;
+			}
+		}
 	}
 }

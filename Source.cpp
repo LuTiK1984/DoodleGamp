@@ -12,6 +12,7 @@
 #define NUM_OF_FLOATING_PLATFORMS 5
 #define FLOATPLATFORM_FIXED_X 100
 #define NUM_OF_ENEMY 1
+#define NUM_OF_BROKEN 3
 
 SDL_Window* win = NULL;
 SDL_Renderer* render = NULL;
@@ -21,6 +22,7 @@ Enemy enemies[NUM_OF_ENEMY];
 
 Platform platforms[NUM_OF_PLATFORMS];
 Platform floatplatforms[NUM_OF_FLOATING_PLATFORMS];
+Platform brokenplatforms[NUM_OF_BROKEN];
 
 
 int win_width = 630, win_height = 950;
@@ -168,6 +170,8 @@ int main(int arcg, char* argv[])
 	CreatePlayer(render, playersurf, playertexture);
 	
 	Mix_Chunk* jumpsfx = Mix_LoadWAV("sfx/jump.wav");
+	Mix_Chunk* brokeplatform = Mix_LoadWAV("sfx/lomise.mp3");
+	Mix_Chunk* falling = Mix_LoadWAV("sfx/pada.mp3");
 
 	SDL_Rect playercondition = {0,30, player.w, player.h};
 	SDL_Rect playerposition = {player.x, player.y, 100, 120};
@@ -182,12 +186,29 @@ int main(int arcg, char* argv[])
 	
 	SDL_Rect platformcondition = { 315, 895, 115, 30 };
 	
+
+
 	SDL_Surface* floatplatformsurf;
 	SDL_Texture* floatplatformtexture;
 
 	CreateFloatPlatforms(render, floatplatformsurf, floatplatformtexture);
 	GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
+	
 	SDL_Rect floatplatformcondition = { 315, 925, 115, 30 };
+
+
+
+	SDL_Surface* brokenplatformsurf;
+	SDL_Texture* brokenplatformtexture;
+
+	CreateBrokenPlatforms(render, brokenplatformsurf, brokenplatformtexture);
+	GenerateBrokenPlatforms(brokenplatforms, NUM_OF_BROKEN);
+
+	SDL_Rect brokenplatformcondition = { 325,826,120,30 }; 
+
+
+
+
 
 	SDL_Surface* enemysurf;
 	SDL_Texture* enemytexture;
@@ -352,6 +373,11 @@ int main(int arcg, char* argv[])
 								floatplatforms[j].platformposition.y += term;
 								UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
 							}
+							if (j < NUM_OF_BROKEN)
+							{
+								brokenplatforms[j].platformposition.y += term;
+								UpdatePlatforms(brokenplatforms, NUM_OF_BROKEN);
+							}
 							if (j < NUM_OF_ENEMY)
 							{
 								enemies[j].position.y += term;
@@ -387,6 +413,13 @@ int main(int arcg, char* argv[])
 								floatplatforms[j].platformposition.y += term;
 								UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
 							}
+
+							if (j < NUM_OF_BROKEN)
+							{
+								brokenplatforms[j].platformposition.y += term;
+								UpdatePlatforms(brokenplatforms, NUM_OF_BROKEN);
+							}
+
 							if (j < NUM_OF_ENEMY)
 							{
 								enemies[j].position.y += term;
@@ -399,6 +432,61 @@ int main(int arcg, char* argv[])
 				}
 			}
 			
+			for (int i = 0; i < NUM_OF_BROKEN; i++)
+			{
+				if (SDL_HasIntersection(&brokenplatforms[i].platformposition, &player.movementbox))
+				{
+					Mix_PlayChannel(2, brokeplatform, 0);
+					RegeneratePlatform(brokenplatforms, i);
+					break;
+				}
+			}
+
+			for (int i = 0; i < NUM_OF_ENEMY; i++)
+			{
+				SDL_Rect termblock = player.movementbox;
+				termblock.y -= player.a;
+
+				if (player.a < 0 && SDL_HasIntersection(&enemies[i].position, &termblock))
+				{
+					player.isJump = true;
+					player.a = PLAYER_JUMP_SPEED;
+					if (enemies[i].position.y < FIXED_Y)
+					{
+						term = FIXED_Y - enemies[i].position.y; //изменеие по y относительно фиксированного значения
+						player.score += term;
+
+						for (int j = 0; j < NUM_OF_PLATFORMS; j++)
+						{
+
+							platforms[j].platformposition.y += term;
+							UpdatePlatforms(platforms, NUM_OF_PLATFORMS);
+
+							if (j < NUM_OF_FLOATING_PLATFORMS)
+							{
+								floatplatforms[j].platformposition.y += term;
+								UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+							}
+
+							if (j < NUM_OF_BROKEN)
+							{
+								brokenplatforms[j].platformposition.y += term;
+								UpdatePlatforms(brokenplatforms, NUM_OF_BROKEN);
+							}
+
+							if (j < NUM_OF_ENEMY)
+							{
+								enemies[j].position.y += term;
+								UpdateEnemy(enemies, NUM_OF_ENEMY);
+							}
+						}
+					}
+					player.y = enemies[i].position.y - 110;
+					RegenerateEnemy(enemies, i);
+					break;
+				}
+			}
+
 			player.a -= 2;	
 
 			player.y -= player.a;
@@ -428,12 +516,20 @@ int main(int arcg, char* argv[])
 			{
 				if (player.movementbox.y > win_height + player.h || SDL_HasIntersection(&enemies[i].position, &player.movementbox))
 				{
+					if (player.movementbox.y > win_height + player.h)
+					{
+						
+						Mix_PlayChannel(3, falling, 0);
+						SDL_Delay(1500);
+						
+					}
 					system("cls");
 					player.x = (win_width / 2) - 50;
 					player.y = FIXED_Y;
 					playerposition = { player.x, player.y, 100, 120 };
 					GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
 					GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
+					GeneratePlatforms(brokenplatforms, NUM_OF_BROKEN);
 					GenerateEnemies(enemies, NUM_OF_ENEMY, &enemycondition);
 					player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
 					printf("\nРекорд: %i\n", player.score);
@@ -474,6 +570,7 @@ int main(int arcg, char* argv[])
 			{
 				DrawPlatforms(render, platformtexture, platformcondition, platforms[i].platformposition);
 				if(i<NUM_OF_FLOATING_PLATFORMS) DrawPlatforms(render, floatplatformtexture, floatplatformcondition, floatplatforms[i].platformposition);
+				if(i<NUM_OF_BROKEN) DrawPlatforms(render, brokenplatformtexture, brokenplatformcondition, brokenplatforms[i].platformposition);
 				if (i < NUM_OF_ENEMY) DrawEnemy(render, enemytexture, enemycondition, enemies[i].position);
 			}
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
@@ -512,6 +609,7 @@ int main(int arcg, char* argv[])
 	DestroyBackground(bck);
 	DestroyPlatforms(platformtexture);
 	DestroyPlatforms(floatplatformtexture);
+	DestroyPlatforms(brokenplatformtexture);
 	DestroyEnemy(enemytexture);
 	DestroyPlayer(playertexture);
 	Mix_CloseAudio();

@@ -172,6 +172,9 @@ int main(int arcg, char* argv[])
 	Mix_Chunk* jumpsfx = Mix_LoadWAV("sfx/jump.wav");
 	Mix_Chunk* brokeplatform = Mix_LoadWAV("sfx/lomise.mp3");
 	Mix_Chunk* falling = Mix_LoadWAV("sfx/pada.mp3");
+	Mix_Chunk* jumponmonster = Mix_LoadWAV("sfx/jumponmonster.mp3");
+	Mix_Chunk* deathfrommonster = Mix_LoadWAV("sfx/monster-crash.mp3");
+	Mix_Chunk* monsterapproaching = Mix_LoadWAV("sfx/monsterblizu.mp3");
 
 	SDL_Rect playercondition = {0,30, player.w, player.h};
 	SDL_Rect playerposition = {player.x, player.y, 100, 120};
@@ -386,6 +389,7 @@ int main(int arcg, char* argv[])
 						}
 					}
 					player.y = platforms[i].platformposition.y-110;
+					printf("\nРекорд: %i\n", player.score);
 					break;
 				}
 				else player.isJump = false;	
@@ -428,6 +432,7 @@ int main(int arcg, char* argv[])
 						}
 					}
 					player.y = floatplatforms[i].platformposition.y - 110;
+					printf("\nРекорд: %i\n", player.score);
 					break;
 				}
 			}
@@ -449,9 +454,11 @@ int main(int arcg, char* argv[])
 				SDL_Rect termblock = player.movementbox;
 				termblock.y -= player.a;
 
+				if(enemies[i].position.y < -300) Mix_PlayChannel(2, monsterapproaching, 2);
+
 				if (player.a < 0 && SDL_HasIntersection(&enemies[i].position, &termblock))
 				{
-					player.isJump = true;
+					Mix_PlayChannel(3, jumponmonster, 0);
 					player.a = PLAYER_JUMP_SPEED;
 					if (enemies[i].position.y < FIXED_Y)
 					{
@@ -485,6 +492,7 @@ int main(int arcg, char* argv[])
 					}
 					player.y = enemies[i].position.y - 110;
 					RegenerateEnemy(enemies, i);
+					printf("\nРекорд: %i\n", player.score);
 					break;
 				}
 			}
@@ -520,10 +528,12 @@ int main(int arcg, char* argv[])
 				{
 					if (player.movementbox.y > win_height + player.h)
 					{
-						
 						Mix_PlayChannel(3, falling, 0);
-						SDL_Delay(1500);
-						
+					}
+
+					if (SDL_HasIntersection(&enemies[i].position, &player.movementbox))
+					{
+						Mix_PlayChannel(3, deathfrommonster, 0);
 					}
 					system("cls");
 					player.x = (win_width / 2) - 50;
@@ -536,6 +546,7 @@ int main(int arcg, char* argv[])
 					player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
 					printf("\nРекорд: %i\n", player.score);
 					player.score = 0;
+					SDL_Delay(1200);
 					isGame = false;
 				}
 

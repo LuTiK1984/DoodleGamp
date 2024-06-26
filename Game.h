@@ -76,14 +76,14 @@ void CreateBrokenPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL
 
 void GenerateBrokenPlatforms(Platform platforms[], int num);
 
-void PlayerJump(Player player, int win_width, bool isRightPressed, bool isLeftPressed);
+void PlayerJump(Player &player, int win_width, bool isRightPressed, bool isLeftPressed);
 
 void MoveMap(Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term);
 
-void CheckCollisionPlatforms(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[]);
+void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[]);
 
-void CheckCollisionFloatPlatforms(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[]);
+void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[]);
 
-void CheckCollisionBrokenPlatforms(Player player, Platform brokenplatforms[], Mix_Chunk* brokeplatform);
+void CheckCollisionBrokenPlatforms(Player &player, Platform brokenplatforms[], Mix_Chunk* brokeplatform);
 
-void CheckEnemyCollision(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster);
+void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster);

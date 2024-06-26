@@ -156,7 +156,7 @@ int main(int arcg, char* argv[])
 
 
 	player.x = (win_width / 2)-50;
-	player.y = FIXED_Y;
+	player.y = FIXED_Y-20;
 	player.w = 90;
 	player.h = 90;
 	player.a = PLAYER_JUMP_SPEED;
@@ -228,7 +228,6 @@ int main(int arcg, char* argv[])
 	SDL_Event ev;
 	bool isRunning = true;
 	bool isGame = false;
-	bool Jumping = false;
 	bool isSettings = false;
 
 	Mix_PlayMusic(menumusic, -1);
@@ -349,7 +348,7 @@ int main(int arcg, char* argv[])
 				Mix_PlayChannel(1, jumpsfx, 0);
 			}
 			else playercondition = { 0, 0, 100, 120 };
-			
+
 			CheckCollisionPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies);
 
 			CheckCollisionFloatPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies);
@@ -361,6 +360,7 @@ int main(int arcg, char* argv[])
 			PlayerJump(player, win_width, isRightPressed, isLeftPressed);
 			
 			FloatPlatformsMove(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
+			
 			EnemiesMove(enemies, NUM_OF_ENEMY, &enemycondition);
 
 			playerposition = { player.x, player.y, 100, 120 };

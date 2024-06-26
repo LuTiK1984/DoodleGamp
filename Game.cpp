@@ -449,7 +449,7 @@ void GenerateBrokenPlatforms(Platform platforms[], int num)
 	}
 }
 
-void PlayerJump(Player player, int win_width, bool isRightPressed, bool isLeftPressed)
+void PlayerJump(Player &player, int win_width, bool isRightPressed, bool isLeftPressed)
 {
 	player.a -= 2;
 
@@ -496,7 +496,7 @@ void MoveMap(Platform platforms[], Platform floatplatforms[], Platform brokenpla
 	}
 }
 
-void CheckCollisionPlatforms(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
+void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
 {
 	int term = 0;
 
@@ -521,7 +521,7 @@ void CheckCollisionPlatforms(Player player, Platform platforms[], Platform float
 	}
 }
 
-void CheckCollisionFloatPlatforms(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
+void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
 {
 	int term = 0;
 	for (int i = 0; i < NUM_OF_FLOATING_PLATFORMS; i++)
@@ -545,7 +545,7 @@ void CheckCollisionFloatPlatforms(Player player, Platform platforms[], Platform 
 	}
 }
 
-void CheckCollisionBrokenPlatforms(Player player, Platform brokenplatforms[], Mix_Chunk* brokeplatform)
+void CheckCollisionBrokenPlatforms(Player &player, Platform brokenplatforms[], Mix_Chunk* brokeplatform)
 {
 	int term = 0;
 	for (int i = 0; i < NUM_OF_BROKEN; i++)
@@ -561,7 +561,7 @@ void CheckCollisionBrokenPlatforms(Player player, Platform brokenplatforms[], Mi
 	}
 }
 
-void CheckEnemyCollision(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster)
+void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster)
 {
 	int term = 0;
 

@@ -341,14 +341,6 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
-
-			if (player.isJump) 
-			{ 
-				playercondition = { 125, 0, 100, 120 }; 
-				Mix_PlayChannel(1, jumpsfx, 0);
-			}
-			else playercondition = { 0, 0, 100, 120 };
-
 			CheckCollisionPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies);
 
 			CheckCollisionFloatPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies);
@@ -357,7 +349,7 @@ int main(int arcg, char* argv[])
 			
 			CheckEnemyCollision(player, platforms, floatplatforms, brokenplatforms, enemies, monsterapproaching, jumponmonster);
 
-			PlayerJump(player, win_width, isRightPressed, isLeftPressed);
+			PlayerJump(player, win_width, isRightPressed, isLeftPressed, playercondition, jumpsfx);
 			
 			FloatPlatformsMove(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
 			

@@ -449,7 +449,7 @@ void GenerateBrokenPlatforms(Platform platforms[], int num)
 	}
 }
 
-void PlayerJump(Player &player, int win_width, bool isRightPressed, bool isLeftPressed)
+void PlayerJump(Player &player, int win_width, bool isRightPressed, bool isLeftPressed, SDL_Rect& playercondition, Mix_Chunk* jumpsfx)
 {
 	player.a -= 2;
 
@@ -468,6 +468,13 @@ void PlayerJump(Player &player, int win_width, bool isRightPressed, bool isLeftP
 		player.x -= 12;
 		player.isFlip = false;
 	}
+
+	if (player.isJump)
+	{
+		playercondition = { 125, 0, 100, 120 };
+		Mix_PlayChannel(1, jumpsfx, 0);
+	}
+	else playercondition = { 0, 0, 100, 120 };
 }
 
 void MoveMap(Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term)

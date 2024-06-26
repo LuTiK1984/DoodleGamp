@@ -6,7 +6,8 @@
 #define NUM_OF_FLOATING_PLATFORMS 5
 #define NUM_OF_ENEMY 1
 #define NUM_OF_BROKEN 3
-
+#define FIXED_Y 750
+#define PLAYER_JUMP_SPEED 46
 
 struct Player
 {
@@ -33,6 +34,8 @@ struct Enemy
 	int movetick;
 	int v;
 };
+
+
 
 void CreatePlayer(SDL_Renderer* render, SDL_Surface* &playersurf, SDL_Texture* &playertexture)
 {
@@ -442,6 +445,148 @@ void GenerateBrokenPlatforms(Platform platforms[], int num)
 				platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 				break;
 			}
+		}
+	}
+}
+
+void PlayerJump(Player player, int win_width, bool isRightPressed, bool isLeftPressed)
+{
+	player.a -= 2;
+
+	player.y -= player.a;
+
+	if (player.x > (win_width + 50)) player.x = -100;
+	if (player.x < -100) player.x = win_width + 50;
+
+	if (isRightPressed && !isLeftPressed)
+	{
+		player.x += 12;
+		player.isFlip = true;
+	}
+	if (!isRightPressed && isLeftPressed)
+	{
+		player.x -= 12;
+		player.isFlip = false;
+	}
+}
+
+void MoveMap(Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term)
+{
+	for (int j = 0; j < NUM_OF_PLATFORMS; j++)
+	{
+
+		platforms[j].platformposition.y += term;
+		UpdatePlatforms(platforms, NUM_OF_PLATFORMS);
+
+		if (j < NUM_OF_FLOATING_PLATFORMS)
+		{
+			floatplatforms[j].platformposition.y += term;
+			UpdatePlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS);
+		}
+		if (j < NUM_OF_BROKEN)
+		{
+			brokenplatforms[j].platformposition.y += term;
+			UpdatePlatforms(brokenplatforms, NUM_OF_BROKEN);
+		}
+		if (j < NUM_OF_ENEMY)
+		{
+			enemies[j].position.y += term;
+			UpdateEnemy(enemies, NUM_OF_ENEMY);
+		}
+	}
+}
+
+void CheckCollisionPlatforms(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
+{
+	int term = 0;
+
+	for (int i = 0; i < NUM_OF_PLATFORMS; i++)
+	{
+		if (SDL_HasIntersection(&platforms[i].platformposition, &player.movementbox))
+		{
+			player.isJump = true;
+			player.a = PLAYER_JUMP_SPEED;
+			if (platforms[i].platformposition.y < FIXED_Y)
+			{
+				term = FIXED_Y - platforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
+				player.score += term;
+
+				MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
+			}
+			player.y = platforms[i].platformposition.y - 110;
+			printf("\nРекорд: %i\n", player.score);
+			break;
+		}
+		else player.isJump = false;
+	}
+}
+
+void CheckCollisionFloatPlatforms(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
+{
+	int term = 0;
+	for (int i = 0; i < NUM_OF_FLOATING_PLATFORMS; i++)
+	{
+		if (SDL_HasIntersection(&floatplatforms[i].platformposition, &player.movementbox))
+		{
+			player.isJump = true;
+			player.a = PLAYER_JUMP_SPEED;
+			if (floatplatforms[i].platformposition.y < FIXED_Y)
+			{
+				term = FIXED_Y - floatplatforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
+				player.score += term;
+
+				MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
+				
+			}
+			player.y = floatplatforms[i].platformposition.y - 110;
+			printf("\nРекорд: %i\n", player.score);
+			break;
+		}
+	}
+}
+
+void CheckCollisionBrokenPlatforms(Player player, Platform brokenplatforms[], Mix_Chunk* brokeplatform)
+{
+	int term = 0;
+	for (int i = 0; i < NUM_OF_BROKEN; i++)
+	{
+		SDL_Rect termblock = player.movementbox;
+		termblock.y -= player.a;
+		if (SDL_HasIntersection(&brokenplatforms[i].platformposition, &termblock))
+		{
+			Mix_PlayChannel(4, brokeplatform, 0);
+			RegeneratePlatform(brokenplatforms, i);
+			break;
+		}
+	}
+}
+
+void CheckEnemyCollision(Player player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster)
+{
+	int term = 0;
+
+	for (int i = 0; i < NUM_OF_ENEMY; i++)
+	{
+		SDL_Rect termblock = player.movementbox;
+		termblock.y -= player.a;
+
+		if (enemies[i].position.y < -300) Mix_PlayChannel(2, monsterapproaching, 1);
+
+		if (player.a <= 0 && SDL_HasIntersection(&enemies[i].position, &termblock))
+		{
+			Mix_PlayChannel(3, jumponmonster, 0);
+			player.a = PLAYER_JUMP_SPEED;
+			if (enemies[i].position.y < FIXED_Y)
+			{
+				term = FIXED_Y - enemies[i].position.y; //изменеие по y относительно фиксированного значения
+				player.score += term;
+
+				MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
+			}
+			player.y = enemies[i].position.y - 110;
+			RegenerateEnemy(enemies, i);
+			printf("\nРекорд: %i\n", player.score);
+			break;
 		}
 	}
 }

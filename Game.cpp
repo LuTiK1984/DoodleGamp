@@ -478,8 +478,9 @@ void PlayerJump(Player &player, int win_width, bool isRightPressed, bool isLeftP
 	else playercondition = { 0, 0, 100, 120 };
 }
 
-void MoveMap(Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term)
+void MoveMap(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term)
 {
+	player.y += term;
 	for (int j = 0; j < NUM_OF_PLATFORMS; j++)
 	{
 
@@ -510,7 +511,7 @@ void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floa
 
 	for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 	{
-		if (SDL_HasIntersection(&platforms[i].platformposition, &player.movementbox))
+		if (SDL_HasIntersection(&platforms[i].platformposition, &player.movementbox) && player.a < 0)
 		{
 			player.isJump = true;
 			player.a = PLAYER_JUMP_SPEED;
@@ -519,7 +520,7 @@ void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floa
 				term = FIXED_Y - platforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
 				player.score += term;
 
-				MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
+				//MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
 			}
 			player.y = platforms[i].platformposition.y - 110;
 			printf("\nРекорд: %i\n", player.score);
@@ -543,7 +544,7 @@ void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform
 				term = FIXED_Y - floatplatforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
 				player.score += term;
 
-				MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
+				//MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
 				
 			}
 			player.y = floatplatforms[i].platformposition.y - 110;
@@ -589,7 +590,7 @@ void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatpla
 				term = FIXED_Y - enemies[i].position.y; //изменеие по y относительно фиксированного значения
 				player.score += term;
 
-				MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
+				//MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
 			}
 			player.y = enemies[i].position.y - 110;
 			RegenerateEnemy(enemies, i);

@@ -350,6 +350,9 @@ int main(int arcg, char* argv[])
 			CheckEnemyCollision(player, platforms, floatplatforms, brokenplatforms, enemies, monsterapproaching, jumponmonster);
 
 			PlayerJump(player, win_width, isRightPressed, isLeftPressed, playercondition, jumpsfx);
+
+			if (player.y <= 200)
+				MoveMap(player, platforms, floatplatforms, brokenplatforms, enemies, 200 - player.y);
 			
 			FloatPlatformsMove(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
 			

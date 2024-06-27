@@ -78,7 +78,7 @@ void GenerateBrokenPlatforms(Platform platforms[], int num);
 
 void PlayerJump(Player& player, int win_width, bool isRightPressed, bool isLeftPressed, SDL_Rect& playercondition, Mix_Chunk* jumpsfx);
 
-void MoveMap(Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term);
+void MoveMap(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term);
 
 void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[]);
 

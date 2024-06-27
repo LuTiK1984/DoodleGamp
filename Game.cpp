@@ -8,6 +8,7 @@
 #define NUM_OF_BROKEN 3
 #define FIXED_Y 750
 #define PLAYER_JUMP_SPEED 46
+#define FLOATPLATFORM_FIXED_X 100
 
 struct Player
 {
@@ -595,5 +596,39 @@ void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatpla
 			printf("\nРекорд: %i\n", player.score);
 			break;
 		}
+	}
+}
+
+void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect &playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool &isGame)
+{
+	for (int i = 0; i < NUM_OF_ENEMY; i++)
+	{
+		if (player.movementbox.y > win_height + player.h + 100 || SDL_HasIntersection(&enemies[i].position, &player.movementbox))
+		{
+			if (player.movementbox.y > win_height + player.h + 100)
+			{
+				Mix_PlayChannel(3, falling, 0);
+			}
+
+			if (SDL_HasIntersection(&enemies[i].position, &player.movementbox))
+			{
+				Mix_PlayChannel(3, deathfrommonster, 0);
+			}
+			Mix_HaltChannel(2);
+			system("cls");
+			player.x = (win_width / 2) - 50;
+			player.y = FIXED_Y;
+			playerposition = { player.x, player.y, 100, 120 };
+			GeneratePlatforms(platforms, NUM_OF_PLATFORMS);
+			GenerateFloatPlatforms(floatplatforms, NUM_OF_FLOATING_PLATFORMS, FLOATPLATFORM_FIXED_X);
+			GenerateBrokenPlatforms(brokenplatforms, NUM_OF_BROKEN);
+			GenerateEnemies(enemies, NUM_OF_ENEMY, &enemycondition);
+			player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
+			printf("\nРекорд: %i\n", player.score);
+			player.score = 0;
+			SDL_Delay(1500);
+			isGame = false;
+		}
+
 	}
 }

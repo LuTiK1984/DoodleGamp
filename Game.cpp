@@ -600,8 +600,38 @@ void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatpla
 	}
 }
 
-void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect &playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool &isGame)
+void ReadRecord(int& record)
 {
+	FILE* f;
+	if (fopen_s(&f, "record.txt", "rt") != 0)
+	{
+		perror("Не удалось открыть файл");
+		return;
+	}
+
+	fscanf_s(f, "%i", &record);
+
+	fclose(f);
+}
+
+void SaveRecord(int& record)
+{
+	FILE* f;
+	if (fopen_s(&f, "file.txt", "wt") != 0)
+	{
+		perror("Не удалось открыть файл");
+		return;
+	}
+
+	fprintf(f, "%i\n", record);
+
+	fclose(f);
+}
+
+void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect &playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool &isGame, int& bestrecord)
+{
+	ReadRecord(bestrecord);
+	int actualrecord = 0;
 	for (int i = 0; i < NUM_OF_ENEMY; i++)
 	{
 		if (player.movementbox.y > win_height + player.h + 100 || SDL_HasIntersection(&enemies[i].position, &player.movementbox))
@@ -625,7 +655,14 @@ void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], 
 			GenerateBrokenPlatforms(brokenplatforms, NUM_OF_BROKEN);
 			GenerateEnemies(enemies, NUM_OF_ENEMY, &enemycondition);
 			player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
-			printf("\nРекорд: %i\n", player.score);
+			actualrecord = player.score;
+			printf("\nВы набрали очков: %i\n", actualrecord);
+			if (player.score > bestrecord)
+			{
+				bestrecord = player.score;
+				SaveRecord(bestrecord);
+			}
+			printf("Лучший результат: %i\n", bestrecord);
 			player.score = 0;
 			SDL_Delay(1500);
 			isGame = false;

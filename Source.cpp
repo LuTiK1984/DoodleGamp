@@ -33,7 +33,7 @@ int mouse_y = 0;
 int mouseclick_x = 0;
 int mouseclick_y = 0;
 
-
+int BestRecord = 0;
 
 int Volume = 128;
 

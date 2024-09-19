@@ -133,7 +133,7 @@ void GeneratePlatforms(Platform platforms[], int num)
 		{
 
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-500, 750);
+			platforms[i].platformposition.y = random(-750, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -173,7 +173,7 @@ void DestroyPlatforms(SDL_Texture* platform)
 void RegeneratePlatform(Platform platforms[],int num)
 {
 	platforms[num].platformposition.x = random(5, 510);
-	platforms[num].platformposition.y = random(-1000, 10);
+	platforms[num].platformposition.y = random(-1000, 0);
 	platforms[num].platformposition.w = 110;
 	platforms[num].platformposition.h = 30;
 
@@ -190,7 +190,7 @@ void RegeneratePlatform(Platform platforms[],int num)
 		if (SDL_HasIntersection(&platforms[i].platformposition, &term))
 		{
 			platforms[i].platformposition.x += random(-50, 50)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-			platforms[i].platformposition.y -= random(-100, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+			platforms[i].platformposition.y -= random(-200, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 			break;
 		}
 	}
@@ -200,7 +200,7 @@ void UpdatePlatforms(Platform platforms[], int num)
 {
 	for (int i = 0; i < num; i++)
 	{
-		if (platforms[i].platformposition.y > 950 + 30) RegeneratePlatform(platforms, i);
+		if (platforms[i].platformposition.y > 950 + 50) RegeneratePlatform(platforms, i);
 	}
 }
 
@@ -225,7 +225,7 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 	for (int i = 0; i < num; i++)
 	{
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-500, 750);
+			platforms[i].platformposition.y = random(-750, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -300,7 +300,7 @@ void GenerateEnemies(Enemy enemies[], int num, SDL_Rect *enemycondition)
 	for (int i = 0; i < num; i++)
 	{
 		enemies[i].position.x = random(5, 510);
-		enemies[i].position.y = random(-2000, -600);
+		enemies[i].position.y = random(-4000, -600);
 		enemies[i].position.w = 150;
 		enemies[i].position.h = 85;
 
@@ -423,7 +423,7 @@ void GenerateBrokenPlatforms(Platform platforms[], int num)
 	for (int i = 0; i < num; i++)
 	{
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-400, 750);
+			platforms[i].platformposition.y = random(-200, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -560,7 +560,7 @@ void CheckCollisionBrokenPlatforms(Player &player, Platform brokenplatforms[], M
 	{
 		SDL_Rect termblock = player.movementbox;
 		termblock.y -= player.a;
-		if (SDL_HasIntersection(&brokenplatforms[i].platformposition, &termblock))
+		if (player.a <= 0 && SDL_HasIntersection(&brokenplatforms[i].platformposition, &termblock))
 		{
 			Mix_PlayChannel(4, brokeplatform, 0);
 			RegeneratePlatform(brokenplatforms, i);

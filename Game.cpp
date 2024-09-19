@@ -152,8 +152,8 @@ void GeneratePlatforms(Platform platforms[], int num)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-10, 50) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
+				platforms[i].platformposition.x += random(-50, 50) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(-100, 100) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
 				break;
 			}
 		}
@@ -189,8 +189,8 @@ void RegeneratePlatform(Platform platforms[],int num)
 	{
 		if (SDL_HasIntersection(&platforms[i].platformposition, &term))
 		{
-			platforms[i].platformposition.x += random(-10, 50)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-			platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+			platforms[i].platformposition.x += random(-50, 50)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+			platforms[i].platformposition.y -= random(-100, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 			break;
 		}
 	}
@@ -245,8 +245,8 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-10, 50) *random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(-10, 100) *random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+				platforms[i].platformposition.x += random(-50, 50) *random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(-200, 100) *random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 				break;
 			}
 		}
@@ -332,7 +332,7 @@ void GenerateEnemies(Enemy enemies[], int num, SDL_Rect *enemycondition)
 			if (SDL_HasIntersection(&enemies[i].position, &term[j]))
 			{
 				enemies[i].position.x += random(-10, 100) * random(-enemies[i].position.w * enemies[i].position.w, enemies[i].position.w * enemies[i].position.w);
-				enemies[i].position.y -= random(-10, 100) * random(-enemies[i].position.h * enemies[i].position.h, enemies[i].position.h * enemies[i].position.h);
+				enemies[i].position.y -= random(-100, 100) * random(-enemies[i].position.h * enemies[i].position.h, enemies[i].position.h * enemies[i].position.h);
 				break;
 			}
 		}
@@ -342,7 +342,7 @@ void GenerateEnemies(Enemy enemies[], int num, SDL_Rect *enemycondition)
 void RegenerateEnemy(Enemy enemies[], int num)
 {
 	enemies[num].position.x = random(5, 510);
-	enemies[num].position.y = random(-10000, 10);
+	enemies[num].position.y = random(-8000, 10);
 	enemies[num].position.w = 150;
 	enemies[num].position.h = 85;
 
@@ -359,7 +359,7 @@ void RegenerateEnemy(Enemy enemies[], int num)
 		if (SDL_HasIntersection(&enemies[num].position, &term))
 		{
 			enemies[i].position.x += random(-10, 100) * random(-enemies[i].position.w * enemies[i].position.w, enemies[i].position.w * enemies[i].position.w);
-			enemies[i].position.y -= random(-10, 100) * random(-enemies[i].position.h * enemies[i].position.h, enemies[i].position.h * enemies[i].position.h);
+			enemies[i].position.y -= random(-100, 100) * random(-enemies[i].position.h * enemies[i].position.h, enemies[i].position.h * enemies[i].position.h);
 			break;
 		}
 	}
@@ -402,7 +402,6 @@ void EnemiesMove(Enemy enemies[], int num, SDL_Rect *enemycondition)
 	}
 }
 
-
 void CreateBrokenPlatforms(SDL_Renderer* render, SDL_Surface*& platformsurf, SDL_Texture*& platformtexture)
 {
 	platformsurf = IMG_Load("sprites/atlas.png");
@@ -424,7 +423,7 @@ void GenerateBrokenPlatforms(Platform platforms[], int num)
 	for (int i = 0; i < num; i++)
 	{
 			platforms[i].platformposition.x = random(5, 510);
-			platforms[i].platformposition.y = random(-500, 750);
+			platforms[i].platformposition.y = random(-400, 750);
 			platforms[i].platformposition.w = 110;
 			platforms[i].platformposition.h = 30;
 
@@ -442,8 +441,8 @@ void GenerateBrokenPlatforms(Platform platforms[], int num)
 		{
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
-				platforms[i].platformposition.x += random(-10, 50) * random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(-10, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+				platforms[i].platformposition.x += random(-50, 50) * random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
+				platforms[i].platformposition.y -= random(-100, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 				break;
 			}
 		}
@@ -623,7 +622,7 @@ void SaveRecord(int& record)
 		return;
 	}
 
-	fprintf(f, "%i\n", record);
+	fprintf(f, "%i", record);
 
 	fclose(f);
 }

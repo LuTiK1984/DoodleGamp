@@ -7,7 +7,7 @@
 #define NUM_OF_ENEMY 1
 #define NUM_OF_BROKEN 3
 #define FIXED_Y 750
-#define PLAYER_JUMP_SPEED 46
+#define PLAYER_JUMP_SPEED 44
 #define FLOATPLATFORM_FIXED_X 100
 
 struct Player
@@ -153,7 +153,7 @@ void GeneratePlatforms(Platform platforms[], int num)
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
 				platforms[i].platformposition.x += random(-50, 50) * random(-platforms[i].platformposition.w* platforms[i].platformposition.w, platforms[i].platformposition.w* platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(-100, 100) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
+				platforms[i].platformposition.y -= random(-100, 50) * random(-platforms[i].platformposition.h* platforms[i].platformposition.h, platforms[i].platformposition.h* platforms[i].platformposition.h);
 				break;
 			}
 		}
@@ -173,7 +173,7 @@ void DestroyPlatforms(SDL_Texture* platform)
 void RegeneratePlatform(Platform platforms[],int num)
 {
 	platforms[num].platformposition.x = random(5, 510);
-	platforms[num].platformposition.y = random(-1000, 0);
+	platforms[num].platformposition.y = random(-800, 20);
 	platforms[num].platformposition.w = 110;
 	platforms[num].platformposition.h = 30;
 
@@ -190,7 +190,7 @@ void RegeneratePlatform(Platform platforms[],int num)
 		if (SDL_HasIntersection(&platforms[i].platformposition, &term))
 		{
 			platforms[i].platformposition.x += random(-50, 50)*random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-			platforms[i].platformposition.y -= random(-200, 100) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+			platforms[i].platformposition.y -= random(-200, 50) * random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 			break;
 		}
 	}
@@ -246,7 +246,7 @@ void GenerateFloatPlatforms(Platform platforms[], int num, int x)
 			if (SDL_HasIntersection(&platforms[i].platformposition, &term[j]))
 			{
 				platforms[i].platformposition.x += random(-50, 50) *random(-platforms[i].platformposition.w * platforms[i].platformposition.w, platforms[i].platformposition.w * platforms[i].platformposition.w);
-				platforms[i].platformposition.y -= random(-200, 100) *random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
+				platforms[i].platformposition.y -= random(-200, 50) *random(-platforms[i].platformposition.h * platforms[i].platformposition.h, platforms[i].platformposition.h * platforms[i].platformposition.h);
 				break;
 			}
 		}

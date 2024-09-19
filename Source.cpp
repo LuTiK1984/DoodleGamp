@@ -6,7 +6,7 @@
 #include "Game.h"
 
 #pragma region GLOBALINIT
-#define PLAYER_JUMP_SPEED 46
+#define PLAYER_JUMP_SPEED 44
 #define FIXED_Y 750
 #define NUM_OF_PLATFORMS 10
 #define NUM_OF_FLOATING_PLATFORMS 5

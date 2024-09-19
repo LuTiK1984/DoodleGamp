@@ -2,12 +2,12 @@
 
 struct Player
 {
-	int x =0, y=0, w=0, h=0;
+	int x, y, w, h;
 	SDL_Rect movementbox = {x,y,50,10};
-	int a=0;
-	bool isJump = false;
-	bool isFlip = false;
-	int score = 0;
+	int a;
+	bool isJump;
+	bool isFlip;
+	int score;
 };
 
 struct Platform

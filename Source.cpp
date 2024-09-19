@@ -164,6 +164,8 @@ int main(int arcg, char* argv[])
 	player.isFlip = false;
 	player.score = 0;
 
+	ReadRecord(BestRecord);
+
 	SDL_Surface* playersurf;
 	SDL_Texture* playertexture;
 
@@ -361,7 +363,7 @@ int main(int arcg, char* argv[])
 			playerposition = { player.x, player.y, 100, 120 };
 			player.movementbox = { player.x+25, player.y + 120, 50, 10 };
 
-			CheckLose(player, platforms, floatplatforms, brokenplatforms, enemies, falling, deathfrommonster, playerposition, enemycondition, win_height, win_width, isGame);
+			CheckLose(player, platforms, floatplatforms, brokenplatforms, enemies, falling, deathfrommonster, playerposition, enemycondition, win_height, win_width, isGame, BestRecord);
 			
 		}
 

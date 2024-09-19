@@ -2,12 +2,12 @@
 
 struct Player
 {
-	int x, y, w, h;
+	int x =0, y=0, w=0, h=0;
 	SDL_Rect movementbox = {x,y,50,10};
-	int a;
-	bool isJump;
-	bool isFlip;
-	int score;
+	int a=0;
+	bool isJump = false;
+	bool isFlip = false;
+	int score = 0;
 };
 
 struct Platform
@@ -92,4 +92,4 @@ void ReadRecord(int& record);
 
 void SaveRecord(int& record);
 
-void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect& playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool& isGame);
+void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect& playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool& isGame, int& bestrecord);

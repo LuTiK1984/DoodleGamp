@@ -617,7 +617,7 @@ void ReadRecord(int& record)
 void SaveRecord(int& record)
 {
 	FILE* f;
-	if (fopen_s(&f, "file.txt", "wt") != 0)
+	if (fopen_s(&f, "record.txt", "wt") != 0)
 	{
 		perror("Не удалось открыть файл");
 		return;
@@ -630,7 +630,6 @@ void SaveRecord(int& record)
 
 void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect &playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool &isGame, int& bestrecord)
 {
-	ReadRecord(bestrecord);
 	int actualrecord = 0;
 	for (int i = 0; i < NUM_OF_ENEMY; i++)
 	{
@@ -655,13 +654,13 @@ void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], 
 			GenerateBrokenPlatforms(brokenplatforms, NUM_OF_BROKEN);
 			GenerateEnemies(enemies, NUM_OF_ENEMY, &enemycondition);
 			player.movementbox = { player.x + 25, player.y + 120, 50, 10 };
-			actualrecord = player.score;
-			printf("\nВы набрали очков: %i\n", actualrecord);
+			printf("\nВы набрали очков: %i\n", player.score);
 			if (player.score > bestrecord)
 			{
 				bestrecord = player.score;
 				SaveRecord(bestrecord);
 			}
+			ReadRecord(bestrecord);
 			printf("Лучший результат: %i\n", bestrecord);
 			player.score = 0;
 			SDL_Delay(1500);

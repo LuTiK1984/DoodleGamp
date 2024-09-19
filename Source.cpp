@@ -297,7 +297,9 @@ int main(int arcg, char* argv[])
 				{
 				
 				case SDL_SCANCODE_ESCAPE: //Клавиша ESC
-					isRunning = false;
+					if (!isGame && !isSettings) isRunning = false;
+					isGame = false;
+					isSettings = false;
 					break;
 				case SDL_SCANCODE_E: 
 					isEPressed = true;

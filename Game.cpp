@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #define NUM_OF_PLATFORMS 10
 #define NUM_OF_FLOATING_PLATFORMS 5
 #define NUM_OF_ENEMY 1
@@ -18,6 +19,7 @@ struct Player
 	bool isJump;
 	bool isFlip;
 	int score;
+	bool isDead = false;
 };
 
 struct Platform
@@ -504,7 +506,33 @@ void MoveMap(Player &player, Platform platforms[], Platform floatplatforms[], Pl
 	}
 }
 
-void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
+SDL_Texture* RenderText(const std::string& message, const std::string& fontFile, SDL_Color color, int fontSize, SDL_Renderer* renderer)
+{
+	//Открываем шрифт
+	TTF_Font* font = TTF_OpenFont(fontFile.c_str(), fontSize);
+	if (font == nullptr) {
+		perror("TTF_OpenFont");
+		return nullptr;
+	}
+	//Сначала нужно отобразить на поверхность с помощью TTF_RenderText,
+	//затем загрузить поверхность в текстуру
+	SDL_Surface* surf = TTF_RenderText_Blended(font, message.c_str(), color);
+	if (surf == nullptr) {
+		TTF_CloseFont(font);
+		perror("TTF_RenderText");
+		return nullptr;
+	}
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surf);
+	if (texture == nullptr) {
+		perror("CreateTexture");
+	}
+	//Очистка поверхности и шрифта
+	SDL_FreeSurface(surf);
+	TTF_CloseFont(font);
+	return texture;
+}
+
+void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], SDL_Texture* text_of_record, SDL_Renderer* render, SDL_Color color,  char rec[])
 {
 	int term = 0;
 
@@ -518,7 +546,8 @@ void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floa
 			{
 				term = FIXED_Y - platforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
 				player.score += term;
-
+				snprintf(rec, 100, "%i", player.score);
+				text_of_record = RenderText(rec, "sample.ttf", color, 32, render);
 				//MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
 			}
 			player.y = platforms[i].platformposition.y - 110;
@@ -529,7 +558,7 @@ void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floa
 	}
 }
 
-void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[])
+void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], SDL_Texture* text_of_record, SDL_Renderer* render, SDL_Color color, char rec[])
 {
 	int term = 0;
 	for (int i = 0; i < NUM_OF_FLOATING_PLATFORMS; i++)
@@ -542,7 +571,8 @@ void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform
 			{
 				term = FIXED_Y - floatplatforms[i].platformposition.y; //изменеие по y относительно фиксированного значения
 				player.score += term;
-
+				snprintf(rec, 100, "%i", player.score);
+				text_of_record = RenderText(rec, "sample.ttf", color, 32, render);
 				//MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
 				
 			}
@@ -569,7 +599,7 @@ void CheckCollisionBrokenPlatforms(Player &player, Platform brokenplatforms[], M
 	}
 }
 
-void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster)
+void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster, SDL_Texture* text_of_record, SDL_Renderer* render, SDL_Color color, char rec[])
 {
 	int term = 0;
 
@@ -588,7 +618,8 @@ void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatpla
 			{
 				term = FIXED_Y - enemies[i].position.y; //изменеие по y относительно фиксированного значения
 				player.score += term;
-
+				snprintf(rec, 100, "%i", player.score);
+				text_of_record = RenderText(rec, "sample.ttf", color, 32, render);
 				//MoveMap(platforms, floatplatforms, brokenplatforms, enemies, term);
 			}
 			player.y = enemies[i].position.y - 110;
@@ -627,7 +658,7 @@ void SaveRecord(int& record)
 	fclose(f);
 }
 
-void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect &playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool &isGame, int& bestrecord)
+void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect &playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool &isGame, int& bestrecord, char rec[], bool isEnterPressed)
 {
 	int actualrecord = 0;
 	for (int i = 0; i < NUM_OF_ENEMY; i++)
@@ -661,7 +692,9 @@ void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], 
 			}
 			ReadRecord(bestrecord);
 			printf("Лучший результат: %i\n", bestrecord);
+			snprintf(rec, 100, "Вы набрали очков: %i\n Лучший результат: %i",player.score, bestrecord);
 			player.score = 0;
+			player.isDead = true;
 			SDL_Delay(1500);
 			isGame = false;
 		}

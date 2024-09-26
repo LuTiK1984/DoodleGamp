@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include "Menu.h"
 #include "Game.h"
 
@@ -41,6 +42,9 @@ bool isRightPressed = false;
 bool isLeftPressed = false;
 bool isEPressed = false;
 bool isQPressed = false;
+bool isEnterPressed = false;
+
+SDL_Color text_color = { 0,0,0,0 };
 
 #pragma endregion
 
@@ -50,6 +54,7 @@ void DeInit(int error)
 	if (win != NULL) SDL_DestroyWindow(win);
 	IMG_Quit();
 	SDL_Quit();
+	TTF_Quit();
 	exit(error);
 }
 
@@ -59,6 +64,12 @@ void Init()
 	{
 		printf("Init Error! - %s", SDL_GetError());
 		system("pause");
+		DeInit(1);
+	}
+
+	if (TTF_Init() != 0) {
+		perror("TTF Init error");
+		SDL_Quit();
 		DeInit(1);
 	}
 
@@ -221,6 +232,13 @@ int main(int arcg, char* argv[])
 	SDL_Rect enemycondition = {675,380, 150, 85};
 	GenerateEnemies(enemies,NUM_OF_ENEMY, &enemycondition);
 
+	SDL_Texture* text_of_record = RenderText("0", "sample.ttf", text_color, 16, render);
+	SDL_Texture* text_of_lose = RenderText("0", "sample.ttf", text_color, 16, render);
+	char lose[100];
+	char rec[100];
+	SDL_Rect text_size = {5,10,160,60};
+	SDL_Rect lose_text = { 5,80,200,60 };
+
 #pragma endregion
 
 
@@ -313,6 +331,9 @@ int main(int arcg, char* argv[])
 				case SDL_SCANCODE_D: 
 					isRightPressed = true;
 					break;
+				case SDL_SCANCODE_KP_ENTER:
+					isEnterPressed = true;
+					break;
 				}
 				break;
 
@@ -331,6 +352,9 @@ int main(int arcg, char* argv[])
 				case SDL_SCANCODE_D:
 					isRightPressed = false;
 					break;
+				case SDL_SCANCODE_KP_ENTER:
+					isEnterPressed = false;
+					break;
 				}
 				break;
 			}
@@ -345,13 +369,16 @@ int main(int arcg, char* argv[])
 		{
 			Mix_PauseMusic();
 			
-			CheckCollisionPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies);
+			CheckCollisionPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies, text_of_record,render,text_color, rec);
 
-			CheckCollisionFloatPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies);
+			CheckCollisionFloatPlatforms(player, platforms, floatplatforms, brokenplatforms, enemies, text_of_record, render, text_color, rec);
 
 			CheckCollisionBrokenPlatforms(player, brokenplatforms, brokeplatform);
 			
-			CheckEnemyCollision(player, platforms, floatplatforms, brokenplatforms, enemies, monsterapproaching, jumponmonster);
+			CheckEnemyCollision(player, platforms, floatplatforms, brokenplatforms, enemies, monsterapproaching, jumponmonster, text_of_record, render, text_color, rec);
+
+			snprintf(rec, 100, "%i", player.score);
+			text_of_record = RenderText(rec, "sample.ttf", text_color, 16, render);
 
 			PlayerJump(player, win_width, isRightPressed, isLeftPressed, playercondition, jumpsfx);
 
@@ -365,8 +392,10 @@ int main(int arcg, char* argv[])
 			playerposition = { player.x, player.y, 100, 120 };
 			player.movementbox = { player.x+25, player.y + 120, 50, 10 };
 
-			CheckLose(player, platforms, floatplatforms, brokenplatforms, enemies, falling, deathfrommonster, playerposition, enemycondition, win_height, win_width, isGame, BestRecord);
-			
+			CheckLose(player, platforms, floatplatforms, brokenplatforms, enemies, falling, deathfrommonster, playerposition, enemycondition, win_height, win_width, isGame, BestRecord, rec, isEnterPressed);
+			ReadRecord(BestRecord);
+			snprintf(lose, 100, "Best score: %i", BestRecord);
+			text_of_lose = RenderText(lose, "sample.ttf", text_color, 16, render);
 		}
 
 		else
@@ -394,6 +423,7 @@ int main(int arcg, char* argv[])
 			DrawBackground(render, bck, rectbckcondition);
 			SDL_SetRenderDrawColor(render, 170, 0, 0, 255);
 			
+			
 			for (int i = 0; i < NUM_OF_PLATFORMS; i++)
 			{
 				DrawPlatforms(render, platformtexture, platformcondition, platforms[i].platformposition);
@@ -401,7 +431,13 @@ int main(int arcg, char* argv[])
 				if(i<NUM_OF_BROKEN) DrawPlatforms(render, brokenplatformtexture, brokenplatformcondition, brokenplatforms[i].platformposition);
 				if (i < NUM_OF_ENEMY) DrawEnemy(render, enemytexture, enemycondition, enemies[i].position);
 			}
+
+
+			SDL_RenderCopy(render, text_of_record, NULL, &text_size);
+			SDL_RenderCopy(render, text_of_lose, NULL, &lose_text);
 			DrawPlayer(render, playertexture, playercondition, playerposition, player);
+			
+			
 
 		}
 		else

@@ -8,6 +8,7 @@ struct Player
 	bool isJump;
 	bool isFlip;
 	int score;
+	bool isDead = false;
 };
 
 struct Platform
@@ -80,16 +81,18 @@ void PlayerJump(Player& player, int win_width, bool isRightPressed, bool isLeftP
 
 void MoveMap(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], int term);
 
-void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[]);
+void CheckCollisionPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], SDL_Texture* text_of_record, SDL_Renderer* render, SDL_Color color, char rec[]);
 
-void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[]);
+void CheckCollisionFloatPlatforms(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], SDL_Texture* text_of_record, SDL_Renderer* render, SDL_Color color, char rec[]);
 
 void CheckCollisionBrokenPlatforms(Player &player, Platform brokenplatforms[], Mix_Chunk* brokeplatform);
 
-void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster);
+void CheckEnemyCollision(Player &player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* monsterapproaching, Mix_Chunk* jumponmonster, SDL_Texture* text_of_record, SDL_Renderer* render, SDL_Color color, char rec[]);
 
 void ReadRecord(int& record);
 
 void SaveRecord(int& record);
 
-void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect& playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool& isGame, int& bestrecord);
+void CheckLose(Player& player, Platform platforms[], Platform floatplatforms[], Platform brokenplatforms[], Enemy enemies[], Mix_Chunk* falling, Mix_Chunk* deathfrommonster, SDL_Rect& playerposition, SDL_Rect& enemycondition, int win_height, int win_width, bool& isGame, int& bestrecord, char rec[], bool isEnterPressed);
+
+SDL_Texture* RenderText(const std::string& message, const std::string& fontFile, SDL_Color color, int fontSize, SDL_Renderer* renderer);
